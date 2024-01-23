@@ -33,18 +33,15 @@ class MainActivity : AppCompatActivity() {
                 likes.setImageResource(
                     if (post.likedByMe) R.drawable.liked else R.drawable.likes
                 )
+                binding.likesCounter.text = post.likes.toShortString()
+                binding.repostCounter.text = post.shares.toShortString()
             }
 
             binding.likes.setOnClickListener {
                 viewModel.like()
-                binding.likesCounter.text = post.likes.toShortString()
-
-//                if (post.likedByMe) binding.likesCounter.text = (++post.likes).toShortString()
-//                else binding.likesCounter.text = (--post.likes).toShortString()
             }
             binding.reposts.setOnClickListener {
                 viewModel.share()
-                binding.repostCounter.text = post.shares.toShortString()
             }
         }
     }
