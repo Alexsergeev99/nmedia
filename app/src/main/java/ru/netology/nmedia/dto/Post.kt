@@ -9,3 +9,4 @@ data class Post (
         val likedByMe: Boolean = false,
         var shares: Int = 0
     )
+
