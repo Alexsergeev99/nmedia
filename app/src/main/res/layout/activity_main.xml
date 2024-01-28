@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,8 +9,105 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/card_post"
+        app:layout_constraintBottom_toTopOf="@id/barrier4"
         />
-</FrameLayout>
+    
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        android:layout_margin="8dp"
+        app:constraint_referenced_ids="content, save"/>
+    
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/post_text"
+        android:padding="8dp"
+        android:inputType="textMultiLine"
+        android:background="@android:color/transparent"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier3"
+        />
+
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:srcCompat="@drawable/baseline_keyboard_arrow_up_24"
+        app:layout_constraintStart_toEndOf="@id/content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier3"
+        android:background="@android:color/transparent"
+        />
+
+    <ImageView
+        android:id="@+id/editedText"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editMessageText"
+        app:srcCompat="@drawable/baseline_mode_edit_24"
+        app:layout_constraintBottom_toTopOf="@+id/barrier3"
+        />
+
+    <TextView
+        android:id="@+id/editMessageText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_message"
+        app:layout_constraintBottom_toBottomOf="@id/editedText"
+        app:layout_constraintStart_toEndOf="@id/editedText"
+        app:layout_constraintTop_toBottomOf="@+id/currentMessage"
+        />
+
+    <TextView
+        android:id="@+id/currentMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@id/editedText"
+        app:layout_constraintBottom_toTopOf="@id/editMessageText"
+        app:layout_constraintTop_toTopOf="@id/editedText"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/closeEdit"
+        app:layout_constraintTop_toBottomOf="@id/barrier4"
+        android:text=""
+        android:maxLines="1"
+        />
+
+    <ImageButton
+        android:id="@+id/closeEdit"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/baseline_close_24"
+        app:layout_constraintTop_toTopOf="@id/editedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/barrier4"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="editMessageText, editedText, currentMessage, closeEdit"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="editedText,editMessageText, closeEdit, currentMessage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

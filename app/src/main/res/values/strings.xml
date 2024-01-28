@@ -8,4 +8,8 @@
     <string name="_5" translatable="false">5</string>
     <string name="_30" translatable="false">30</string>
     <string name="_0" translatable="false">0</string>
+    <string name="remove">remove</string>
+    <string name="edit">edit</string>
+    <string name="edit_message">Edit Message</string>
+    <string name="post_text">Post Text</string>
 </resources>
