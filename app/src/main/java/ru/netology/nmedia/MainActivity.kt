@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.edited.observe(this) { post->
+        viewModel.edited.observe(this) { post ->
             if (post.id == 0L) {
                 return@observe
             } else {
@@ -57,14 +57,14 @@ class MainActivity : AppCompatActivity() {
                     binding.currentMessage.text = post.content
                     binding.group.visibility = View.VISIBLE
                     setText(post.content)
-                 }
                 }
+            }
 
         }
         binding.list.adapter = adapter
         binding.save.setOnClickListener {
             with(binding.content) {
-                if(text.isNullOrBlank()) {
+                if (text.isNullOrBlank()) {
                     Toast.makeText(
                         this@MainActivity,
                         "Content can`t be empty",
@@ -72,10 +72,10 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                     return@setOnClickListener
                 }
-                viewModel.changeContent(text.toString())
-                viewModel.save()
+                    viewModel.changeContent(text.toString())
+                    viewModel.save()
 
-               setText("")
+                setText("")
                 clearFocus()
                 AndroidUtils.hideKeyboard(this)
             }
@@ -85,7 +85,9 @@ class MainActivity : AppCompatActivity() {
             binding.content.setText("")
             binding.content.clearFocus()
             AndroidUtils.hideKeyboard(binding.content)
+            viewModel.save()
         }
     }
+        }
 
-}
+
