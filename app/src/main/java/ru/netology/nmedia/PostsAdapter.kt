@@ -50,9 +50,7 @@ private val onInteractionListener: onInteractionListener
             author.text = post.author
             data.text = post.published
             mainText.text = post.content
-            likes.setImageResource(
-                if (post.likedByMe) R.drawable.liked else R.drawable.likes
-            )
+            likes.isChecked = post.likedByMe
             binding.repostCounter.text = post.shares.toShortString()
             binding.likesCounter.text = post.likes.toShortString()
 
