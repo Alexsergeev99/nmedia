@@ -83,57 +83,30 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/likes"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:checkable="true"
-        app:layout_constraintEnd_toStartOf="@id/likes_counter"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
         app:layout_constraintStart_toStartOf="parent"
         app:icon="@drawable/ic_like_24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
-        android:button="@drawable/ic_like_24dp"
         tools:text="@string/_0"
         tools:checked="true"
         style="@style/Widget.AppTheme.LikeButton"
         />
 
-    <TextView
-        android:id="@+id/likes_counter"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        tools:text="@string/_0"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:layout_constraintStart_toEndOf="@id/likes"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="6dp"
-        />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reposts"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:srcCompat="@drawable/baseline_reply_24"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:layout_constraintStart_toEndOf="@id/likes_counter"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toEndOf="@id/likes"
         tools:text="@string/_0"
         tools:checked="true"
         android:checkable="true"
         app:icon="@drawable/baseline_reply_24"
         style="@style/Widget.AppTheme.RepostButton"
         />
-
-    <TextView
-        android:id="@+id/repost_counter"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        tools:text="@string/_0"
-        app:layout_constraintTop_toBottomOf="@id/barrier2"
-        app:layout_constraintStart_toEndOf="@id/reposts"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="12dp" />
 
     <ImageView
         android:id="@+id/views"

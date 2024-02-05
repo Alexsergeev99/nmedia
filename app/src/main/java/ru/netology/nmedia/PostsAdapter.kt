@@ -51,8 +51,8 @@ private val onInteractionListener: onInteractionListener
             data.text = post.published
             mainText.text = post.content
             likes.isChecked = post.likedByMe
-            binding.repostCounter.text = post.shares.toShortString()
-            binding.likesCounter.text = post.likes.toShortString()
+            binding.reposts.text = post.shares.toShortString()
+           likes.text = post.likes.toShortString()
 
             likes.setOnClickListener {
                 onInteractionListener.onLike(post)
