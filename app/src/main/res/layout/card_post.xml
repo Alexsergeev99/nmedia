@@ -50,6 +50,7 @@
         app:srcCompat="@drawable/baseline_more_vert_24"
         app:layout_constraintTop_toTopOf="@id/avatar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:iconPadding="2dp"
         android:background="@android:color/transparent"
         app:icon="@drawable/baseline_more_vert_24"
         tools:text=""
@@ -89,6 +90,7 @@
         app:layout_constraintTop_toBottomOf="@id/barrier2"
         app:layout_constraintStart_toStartOf="parent"
         app:icon="@drawable/ic_like_24dp"
+        app:iconPadding="2dp"
         tools:text="@string/_0"
         tools:checked="true"
         style="@style/Widget.AppTheme.LikeButton"
@@ -101,6 +103,7 @@
         app:srcCompat="@drawable/baseline_reply_24"
         app:layout_constraintTop_toBottomOf="@id/barrier2"
         app:layout_constraintStart_toEndOf="@id/likes"
+        app:iconPadding="1dp"
         tools:text="@string/_0"
         tools:checked="true"
         android:checkable="true"
@@ -127,6 +130,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="12dp" />
+
+    <ImageView
+        android:id="@+id/videoPicture"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        app:srcCompat="@drawable/baseline_play_arrow_24"
+        app:layout_constraintTop_toBottomOf="@id/main_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/likes"
+        android:visibility="gone"
+        android:background="@drawable/picture"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

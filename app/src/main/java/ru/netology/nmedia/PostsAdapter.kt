@@ -1,15 +1,18 @@
 package ru.netology.nmedia
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.viewmodel.PostViewModel
+
 
 interface onInteractionListener{
     fun onLike(post: Post)
@@ -45,6 +48,7 @@ private val onInteractionListener: onInteractionListener
         in 10_000_000..<1_000_000_000 -> "${this / 1_000_000}M"
         else -> "MANY"
     }
+
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
@@ -60,6 +64,15 @@ private val onInteractionListener: onInteractionListener
             reposts.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
+
+            if(post.video != null) {
+                binding.videoPicture.visibility = View.VISIBLE
+            }
+
+            videoPicture.setOnClickListener {
+                videoPicture.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.video)))
+            }
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)

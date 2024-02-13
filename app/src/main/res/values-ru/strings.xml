@@ -6,4 +6,8 @@
     <string name="edit">Редактировать</string>
     <string name="edit_message">Редактируемое сообщение</string>
     <string name="post_text">Текст поста</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="error_empty_content">Поле не может быть пустое</string>
+    <string name="ok">OK</string>
+    <string name="description_post_save">Сохранить</string>
 </resources>
