@@ -67,10 +67,15 @@ private val onInteractionListener: onInteractionListener
 
             if(post.video != null) {
                 binding.videoPicture.visibility = View.VISIBLE
+                binding.playButton.visibility = View.VISIBLE
             }
 
             videoPicture.setOnClickListener {
                 videoPicture.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.video)))
+            }
+
+            playButton.setOnClickListener {
+                playButton.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.video)))
             }
 
             menu.setOnClickListener {

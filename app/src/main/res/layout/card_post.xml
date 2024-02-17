@@ -135,13 +135,30 @@
         android:id="@+id/videoPicture"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        app:srcCompat="@drawable/baseline_play_arrow_24"
+        app:srcCompat="@drawable/picture"
         app:layout_constraintTop_toBottomOf="@id/main_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/likes"
         android:visibility="gone"
-        android:background="@drawable/picture"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/play_button"
+        android:layout_width="wrap_content"
+        android:layout_height="240dp"
+        app:srcCompat="@drawable/baseline_play_arrow_120"
+        tools:checked="true"
+        android:checkable="true"
+        app:icon="@drawable/baseline_play_arrow_120"
+        app:layout_constraintTop_toBottomOf="@id/main_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/likes"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        app:backgroundTint="@android:color/transparent"
         />
 
 

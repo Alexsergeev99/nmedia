@@ -2,10 +2,9 @@ package ru.netology.nmedia
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.netology.nmedia.databinding.ActivityEditPostBinding
-import ru.netology.nmedia.dto.Post
 
 class EditPostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,6 +12,7 @@ class EditPostActivity : AppCompatActivity() {
         val binding = ActivityEditPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.edit.requestFocus()
+        binding.edit.setText(intent.getStringExtra(Intent.EXTRA_TEXT))
         binding.ok.setOnClickListener {
             val intent = Intent()
             if (binding.edit.text.isNullOrBlank()) {

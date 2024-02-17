@@ -12,4 +12,7 @@
     <style name="Widget.AppTheme.MenuButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="iconTint">@color/like_button_tint</item>"
     </style>
+    <style name="Widget.AppTheme.PlayButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/white</item>"
+    </style>
 </resources>

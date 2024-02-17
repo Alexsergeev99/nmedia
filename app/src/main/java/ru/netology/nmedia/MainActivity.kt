@@ -57,9 +57,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                editPostLauncher.launch()
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                }
+                editPostLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
             }
-
         }
         )
         viewModel.data.observe(this) { posts ->
