@@ -5,6 +5,8 @@ import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.repository.PostRepository
@@ -31,6 +33,15 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
             repository.save(it)
         }
         edited.value = empty
+    }
+
+    fun Int.toShortString(): String = when (this) {
+        in 0..<1_000 -> this.toString()
+        in 1_000..<10_000 -> "${ (this / 100) / 10.0 }K"
+        in 10_000..<1_000_000 -> "${ this / 1000 }K"
+        in 1_000_000..<10_000_000 -> "${(this / 100_000) / 10.0}M"
+        in 10_000_000..<1_000_000_000 -> "${this / 1_000_000}M"
+        else -> "MANY"
     }
 
     fun edit(post: Post) {

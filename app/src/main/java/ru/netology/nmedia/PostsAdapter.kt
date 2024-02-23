@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -77,6 +78,8 @@ private val onInteractionListener: onInteractionListener
             playButton.setOnClickListener {
                 playButton.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.video)))
             }
+
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

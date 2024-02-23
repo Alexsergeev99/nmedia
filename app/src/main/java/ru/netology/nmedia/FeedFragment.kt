@@ -3,33 +3,41 @@ package ru.netology.nmedia
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.ViewGroup
 import androidx.activity.result.launch
 import androidx.activity.viewModels
-import ru.netology.nmedia.databinding.ActivityMainBinding
-import ru.netology.nmedia.databinding.CardPostBinding
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia.EditPostFragment.Companion.idArg
+import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+class FeedFragment : Fragment() {
 
-        val viewModel: PostViewModel by viewModels()
-
-        val newPostLauncher = registerForActivityResult(NewPostResultContract()){ result ->
+    private val viewModel: PostViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentFeedBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
             result ?: return@registerForActivityResult
             viewModel.changeContent(result)
             viewModel.save()
         }
 
-        val editPostLauncher = registerForActivityResult(EditPostResultContract()){ result ->
+        val editPostLauncher = registerForActivityResult(EditPostResultContract()) { result ->
             result ?: return@registerForActivityResult
             viewModel.changeContent(result)
             viewModel.save()
@@ -57,16 +65,17 @@ class MainActivity : AppCompatActivity() {
 
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, post.content)
-                }
-                editPostLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
+                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment2)
+//                val intent = Intent().apply {
+//                    action = Intent.ACTION_SEND
+//                    type = "text/plain"
+//                    putExtra(Intent.EXTRA_TEXT, post.content)
+//                }
+//                editPostLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
             }
         }
         )
-        viewModel.data.observe(this) { posts ->
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
             val newPost = adapter.currentList.size < posts.size
             adapter.submitList(posts) {
                 if (newPost) {
@@ -75,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.edited.observe(this) { post ->
+        viewModel.edited.observe(viewLifecycleOwner) { post ->
             if (post.id == 0L) {
                 return@observe
             } else {
@@ -86,40 +95,22 @@ class MainActivity : AppCompatActivity() {
 //                    setText(post.content)
 //                }
             }
-
         }
         binding.list.adapter = adapter
 
         binding.add.setOnClickListener {
-            newPostLauncher.launch()
+            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
 
-//        binding.save.setOnClickListener {
-//            with(binding.content) {
-//                if (text.isNullOrBlank()) {
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        "Content can`t be empty",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    return@setOnClickListener
-//                }
-//                    viewModel.changeContent(text.toString())
-//                    viewModel.save()
-//
-//                setText("")
-//                clearFocus()
-//                AndroidUtils.hideKeyboard(this)
-//            }
+//        binding.setOnClickListener {
+//            findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment)
 //        }
-//        binding.closeEdit.setOnClickListener {
-//            binding.group.visibility = View.GONE
-//            binding.content.setText("")
-//            binding.content.clearFocus()
-//            AndroidUtils.hideKeyboard(binding.content)
-//            viewModel.save()
-//        }
+
+        return binding.root
     }
-        }
+}
+
+
+
 
 
