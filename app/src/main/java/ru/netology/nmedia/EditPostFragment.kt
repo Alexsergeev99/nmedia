@@ -39,15 +39,16 @@ class EditPostFragment : Fragment() {
             false
         )
         binding.edit.requestFocus()
+        binding.edit.setText(arguments?.textArg)
         val postId: Long = (arguments?.idArg ?: -1).toLong()
-        viewModel.data.observe(viewLifecycleOwner) {posts->
-            val post = posts.find { it.id == postId } ?: return@observe
-            with(binding) {
-                edit.setText(post.content)
-                edit.id = post.id.toInt()
-            }
-            binding.edit.setText(post.content)
-        }
+//        viewModel.data.observe(viewLifecycleOwner) {posts->
+//            val post = posts.find { it.id == postId } ?: return@observe
+//            with(binding) {
+//                edit.setText(post.content)
+//                edit.id = post.id.toInt()
+//            }
+
+        //}
 //        binding.edit.setText()
 
         binding.ok.setOnClickListener {

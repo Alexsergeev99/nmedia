@@ -20,6 +20,7 @@ interface onInteractionListener{
     fun onShare(post: Post)
     fun onRemove(post: Post)
     fun onEdit(post: Post)
+    fun onClick(post: Post)
 }
 
 
@@ -77,6 +78,10 @@ private val onInteractionListener: onInteractionListener
 
             playButton.setOnClickListener {
                 playButton.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.video)))
+            }
+
+            root.setOnClickListener {
+                onInteractionListener.onClick(post)
             }
 
 

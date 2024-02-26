@@ -6,10 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
+
+    <include
+        android:id="@+id/single_post"
+        layout="@layout/card_post" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
+
 
         <ImageView
             android:id="@+id/avatar"
@@ -69,7 +75,7 @@
             android:id="@+id/main_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mainText"
+            tools:text="@string/mainText"
             android:layout_margin="8dp"
             android:gravity="top|start"
             app:layout_constraintTop_toBottomOf="@+id/barrier" />

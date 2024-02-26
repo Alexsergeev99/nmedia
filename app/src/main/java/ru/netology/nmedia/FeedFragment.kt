@@ -11,7 +11,9 @@ import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
+import ru.netology.nmedia.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -63,9 +65,20 @@ class FeedFragment : Fragment() {
                 viewModel.removeById(post.id)
             }
 
+            override fun onClick(post: Post) {
+                findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment,
+                    Bundle().apply {
+                        textArg1 = post.content
+                    })
+            }
+
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
-                findNavController().navigate(R.id.action_feedFragment_to_editPostFragment2)
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_editPostFragment2,
+                            Bundle().apply {
+                        textArg = post.content
+                    })
 //                val intent = Intent().apply {
 //                    action = Intent.ACTION_SEND
 //                    type = "text/plain"
