@@ -69,6 +69,7 @@ class FeedFragment : Fragment() {
                 findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment,
                     Bundle().apply {
                         textArg1 = post.content
+                        idArg = post.id.toInt()
                     })
             }
 

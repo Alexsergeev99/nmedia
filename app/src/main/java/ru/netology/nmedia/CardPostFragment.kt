@@ -1,5 +1,6 @@
 package ru.netology.nmedia
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
@@ -39,36 +41,20 @@ class CardPostFragment : Fragment() {
             container,
             false
         )
-        binding.mainText.setText(arguments?.textArg1)
-
-
-        fun Int.toShortString(): String = when (this) {
-            in 0..<1_000 -> this.toString()
-            in 1_000..<10_000 -> "${(this / 100) / 10.0}K"
-            in 10_000..<1_000_000 -> "${this / 1000}K"
-            in 1_000_000..<10_000_000 -> "${(this / 100_000) / 10.0}M"
-            in 10_000_000..<1_000_000_000 -> "${this / 1_000_000}M"
-            else -> "MANY"
-        }
 
         val postId: Long = (arguments?.idArg ?: -1).toLong()
         viewModel.data.observe(viewLifecycleOwner) { list ->
             list.find { it.id == postId }?.let { post ->
-                binding.likes.text = post.likes.toShortString()
+//                binding.likes.text = post.likes.toShortString()
 
                 PostViewHolder(binding.singlePost, object : onInteractionListener {
 
                     override fun onLike(post: Post) {
-                        binding.likes.text = post.likes.toShortString()
-                        binding.likes.setOnClickListener {
-                            onLike(post)
-                        }
                         viewModel.likeById(post.id)
                     }
 
                     override fun onShare(post: Post) {
                         viewModel.shareById(post.id)
-                        binding.reposts.text = post.shares.toShortString()
                         val intent = Intent().apply {
                             action = Intent.ACTION_SEND
                             type = "text/plain"
@@ -99,9 +85,22 @@ class CardPostFragment : Fragment() {
                 }).bind(post)
             }
         }
-//        activity?.onBackPressedDispatcher?.onBackPressed().apply {
-//            findNavController().navigateUp()
-//        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    AlertDialog.Builder(requireActivity()).apply {
+                        setTitle("Отмена")
+                        setMessage("Вы уверены, что хотите отменить редактирование поста?")
+                        setPositiveButton("Да") { _, _ ->
+                            viewModel.save()
+                            findNavController().navigateUp()
+                        }
+                        setNegativeButton("Нет") { _, _ -> }
+                        setCancelable(true)
+                    }.create().show()
+                }
+            }
+        )
         return binding.root
     }
 }
