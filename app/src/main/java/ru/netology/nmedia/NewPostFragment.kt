@@ -37,6 +37,9 @@ class NewPostFragment : Fragment() {
             container,
             false
         )
+
+        arguments?.textArg?.let(binding.edit::setText)
+
         binding.edit.requestFocus()
 
         binding.ok.setOnClickListener {
@@ -45,20 +48,6 @@ class NewPostFragment : Fragment() {
             AndroidUtils.hideKeyboard(requireView())
             findNavController().navigateUp()
         }
-
-//        binding.ok.setOnClickListener {
-//            val intent = Intent()
-//            if (binding.edit.text.isNullOrBlank()) {
-//                setResult(Activity.RESULT_CANCELED, intent)
-//            } else {
-//                val content = binding.edit.text.toString()
-//                intent.putExtra(Intent.EXTRA_TEXT, content)
-//                setResult(Activity.RESULT_OK, intent)
-//            }
-//            finish()
-//        }
-
-        arguments?.textArg?.let(binding.edit::setText)
         return binding.root
     }
 }

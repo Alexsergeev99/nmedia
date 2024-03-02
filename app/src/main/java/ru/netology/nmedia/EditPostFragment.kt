@@ -1,11 +1,13 @@
 package ru.netology.nmedia
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -69,8 +71,22 @@ class EditPostFragment : Fragment() {
 //            }
 //        }
 //       arguments?.textArg?.let(binding.edit::setText)
-
-
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    AlertDialog.Builder(requireActivity()).apply {
+                        setTitle("Отмена")
+                        setMessage("Вы уверены, что хотите отменить редактирование поста?")
+                        setPositiveButton("Да") { _, _ ->
+                            viewModel.save()
+                            findNavController().navigateUp()
+                        }
+                        setNegativeButton("Нет") { _, _ -> }
+                        setCancelable(true)
+                    }.create().show()
+                }
+            }
+        )
         return binding.root
     }
 }
