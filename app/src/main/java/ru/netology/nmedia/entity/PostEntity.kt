@@ -16,7 +16,7 @@ data class PostEntity (
     var shares: Int = 0,
     var video: String? = null
 ) {
-    fun toDto() = Post(id, author = "Нетология. Институт интернет профессий", content, published = "1 марта в 10:00", likes, likedByMe, shares, video)
+    fun toDto() = Post(id, author, content, published, likes, likedByMe, shares, video)
 
     companion object {
     fun fromDto(post: Post) = PostEntity(

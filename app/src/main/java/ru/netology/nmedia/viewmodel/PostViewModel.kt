@@ -10,9 +10,9 @@ import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 
 private val empty: Post = Post(
     id = 0,
- author = "",
+ author = "Нетология. Институт интернет профессий",
  content = "",
- published = "",
+ published = "1 марта в 10:00",
  likes = 0,
  likedByMe = false,
  shares = 0,

@@ -89,14 +89,7 @@ class CardPostFragment : Fragment() {
             viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     AlertDialog.Builder(requireActivity()).apply {
-                        setTitle("Отмена")
-                        setMessage("Вы уверены, что хотите отменить редактирование поста?")
-                        setPositiveButton("Да") { _, _ ->
-                            viewModel.save()
                             findNavController().navigateUp()
-                        }
-                        setNegativeButton("Нет") { _, _ -> }
-                        setCancelable(true)
                     }.create().show()
                 }
             }
