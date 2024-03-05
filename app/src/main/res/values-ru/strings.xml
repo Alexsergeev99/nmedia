@@ -10,4 +10,10 @@
     <string name="error_empty_content">Поле не может быть пустое</string>
     <string name="ok">OK</string>
     <string name="description_post_save">Сохранить</string>
+    <string name="google_play_unavailable">Google Api Недоступен</string>
+    <string name="notification_user_liked">Пользователь %1$s поставил лайк %2$s\'s post</string>
+    <string name="channel_remote_name">Серверные уведомления</string>
+    <string name="channel_remote_description">Уведомления с удаленного сервера</string>
+    <string name="notification_new_post">Пользователь %1$s добавил %2$s\'s пост</string>
+
 </resources>
