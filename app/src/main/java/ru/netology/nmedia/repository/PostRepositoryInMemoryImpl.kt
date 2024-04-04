@@ -84,7 +84,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
         )
     private  val data = MutableLiveData(posts)
 
-    override fun getAll(): LiveData<List<Post>> = data
+    override fun getAll(): List<Post> = TODO()
 
     override fun shareById(id: Long) {
         posts = posts.map{
@@ -92,11 +92,12 @@ class PostRepositoryInMemoryImpl : PostRepository {
         }
         data.value = posts
     }
-    override fun likeById(id: Long) {
-        posts = posts.map{
-            if(it.id != id) it else it.copy(likes = if (it.likedByMe) --it.likes else ++it.likes, likedByMe = !it.likedByMe)
-        }
-        data.value = posts
+    override fun likeById(post: Post): Post {
+//        posts = posts.map{
+//            if(it.id != id) it else it.copy(likes = if (it.likedByMe) --it.likes else ++it.likes, likedByMe = !it.likedByMe)
+//        }
+//        data.value = posts
+        TODO()
     }
 
     override fun removeById(id: Long) {
@@ -104,26 +105,27 @@ class PostRepositoryInMemoryImpl : PostRepository {
         data.value = posts
     }
 
-    override fun save(post: Post) {
-        if (post.id == 0L) {
-            posts = listOf(
-                post.copy(
-                    id = nextId++,
-                    author = "Нетология. Университет интернет-профессий будущего",
-                    published = "now",
-                    likedByMe = false,
-                    likes = 0,
-                    shares = 0,
-                    video = null
-                )
-            ) + posts
-        } else {
-            posts = posts.map{
-                if(it.id != post.id) it else it.copy(content = post.content)
-            }
-        }
-        data.value = posts
-        return
+    override fun save(post: Post) : Post{
+//        if (post.id == 0L) {
+//            posts = listOf(
+//                post.copy(
+//                    id = nextId++,
+//                    author = "Нетология. Университет интернет-профессий будущего",
+//                    published = "now",
+//                    likedByMe = false,
+//                    likes = 0,
+//                    shares = 0,
+//                    video = null
+//                )
+//            ) + posts
+//        } else {
+//            posts = posts.map{
+//                if(it.id != post.id) it else it.copy(content = post.content)
+//            }
+//        }
+//        data.value = posts
+//        return
+        TODO()
     }
 
 }
