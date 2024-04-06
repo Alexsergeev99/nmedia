@@ -17,42 +17,40 @@ import java.util.concurrent.TimeUnit
 class PostRepositoryRoomImpl() : PostRepository {
 
     private companion object{
-        const val BASE_URL = "http://10.0.2.2:9999/"
+        const val BASE_URL = "http://10.0.2.2:9999"
         private val jsonType = "application/json".toMediaType()
     }
 
-    private var posts = emptyList<Post>()
-    private val data = MutableLiveData(posts)
+//    private var posts = emptyList<Post>()
+//    private val data = MutableLiveData(posts)
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()
 
     private val gson = Gson()
-    private val type = object : TypeToken<List<Post>>() {}
+    private val typeToken = object : TypeToken<List<Post>>() {}
 
     override fun getAll(): List<Post> {
-        val request = Request.Builder()
+        val request: Request = Request.Builder()
             .url("${BASE_URL}/api/slow/posts")
             .build()
-        val call = client.newCall(request)
-        val response = call.execute()
 
-        val bodyText = requireNotNull(response.body).string()
-
-        return gson.fromJson(bodyText, type)
+        return client.newCall(request)
+            .execute()
+            .let { it.body?.string() ?: throw RuntimeException("body is null") }
+            .let {
+                gson.fromJson(it, typeToken.type)
+            }
     }
-
-    override fun save(post: Post) : Post {
-        val request = Request.Builder()
+    override fun save(post: Post) {
+        val request: Request = Request.Builder()
+            .post(gson.toJson(post).toRequestBody(jsonType))
             .url("${BASE_URL}/api/slow/posts")
-            .post(gson.toJson(post, Post::class.java).toRequestBody(jsonType))
             .build()
-        val call = client.newCall(request)
-        val response = call.execute()
 
-        val bodyText = requireNotNull(response.body).string()
-
-        return gson.fromJson(bodyText, Post::class.java)
+        client.newCall(request)
+            .execute()
+            .close()
     }
 
     override fun likeById(post: Post) : Post{

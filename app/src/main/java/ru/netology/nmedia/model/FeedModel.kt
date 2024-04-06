@@ -7,5 +7,4 @@ data class FeedModel (
     var loading: Boolean = false,
     var error: Boolean = false,
     var empty: Boolean = false
-
 )

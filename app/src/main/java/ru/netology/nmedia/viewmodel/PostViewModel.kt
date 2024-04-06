@@ -10,9 +10,10 @@ import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import java.io.IOException
 import kotlin.concurrent.thread
 
-private val empty: Post = Post(
+private val empty = Post(
     id = 0,
  author = "Нетология. Институт интернет профессий",
  content = "",
@@ -32,17 +33,6 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
-    fun save() {
-        edited.value?.let {
-            thread {
-                repository.save(it)
-                _postCreated.postValue(Unit)
-
-            }
-        }
-        edited.value = empty
-    }
-
     fun Int.toShortString(): String = when (this) {
         in 0..<1_000 -> this.toString()
         in 1_000..<10_000 -> "${ (this / 100) / 10.0 }K"
@@ -58,17 +48,27 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
 
     fun load() {
         thread {
+            // Начинаем загрузку
             _data.postValue(FeedModel(loading = true))
-
-            val  model = try {
+            try {
+                // Данные успешно получены
                 val posts = repository.getAll()
-
                 FeedModel(posts = posts, empty = posts.isEmpty())
-            } catch (e:Exception) {
+            } catch (e: IOException) {
+                // Получена ошибка
                 FeedModel(error = true)
-            }
-            _data.postValue(model)
+            }.also(_data::postValue)
         }
+    }
+
+    fun save() {
+        edited.value?.let {
+            thread {
+                repository.save(it)
+                _postCreated.postValue(Unit)
+            }
+        }
+        edited.value = empty
     }
 
     fun edit(post: Post) {
@@ -76,17 +76,24 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
         return
     }
 
-    fun changeContent(content: String) {
-        edited.value?.let {
-            val text = content.trim()
-            if (it.content == text) {
-                return
-            }
-            else {
-                edited.value = it.copy(content = text)
-            }
-        }
+//    fun changeContent(content: String) {
+//        edited.value?.let {
+//            val text = content.trim()
+//            if (it.content == text) {
+//                return
+//            }
+//            else {
+//                edited.value = it.copy(content = text)
+//            }
+//        }
+//    }
+fun changeContent(content: String) {
+    val text = content.trim()
+    if (edited.value?.content == text) {
+        return
     }
+    edited.value = edited.value?.copy(content = text)
+}
     fun likeById(post: Post): Post {
         thread {
             if (post.likedByMe) {
@@ -99,7 +106,7 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
                 post.likes++
             }
         }
-        return  post
+        return post
     }
     fun shareById(id: Long) = repository.shareById(id)
     fun removeById(id: Long) {

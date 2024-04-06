@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".FeedFragment"
     >
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/swipe"
+        tools:ignore="MissingConstraints">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -16,6 +22,7 @@
         app:layout_constraintBottom_toTopOf="@id/barrier4"
         app:layout_constraintTop_toTopOf="parent"
         />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <ImageView
@@ -128,6 +135,7 @@
         android:id="@+id/retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/retry"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,4 +150,4 @@
         app:constraint_referenced_ids="errorText, retry"
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>

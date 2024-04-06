@@ -105,7 +105,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
         data.value = posts
     }
 
-    override fun save(post: Post) : Post{
+    override fun save(post: Post){
 //        if (post.id == 0L) {
 //            posts = listOf(
 //                post.copy(

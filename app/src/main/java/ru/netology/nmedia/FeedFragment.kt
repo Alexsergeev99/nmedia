@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -34,17 +35,6 @@ class FeedFragment : Fragment() {
             container,
             false
         )
-        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.changeContent(result)
-            viewModel.save()
-        }
-
-        val editPostLauncher = registerForActivityResult(EditPostResultContract()) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.changeContent(result)
-            viewModel.save()
-        }
 
         val adapter = PostsAdapter(object : onInteractionListener {
             override fun onLike(post: Post) {
@@ -98,18 +88,18 @@ class FeedFragment : Fragment() {
             //}
         //}
 
-        viewModel.edited.observe(viewLifecycleOwner) { post ->
-            if (post.id == 0L) {
-                return@observe
-            } else {
+//        viewModel.edited.observe(viewLifecycleOwner) { post ->
+//            if (post.id == 0L) {
+//                return@observe
+//            } else {
 //                with(binding.content) {
 //                    requestFocus()
 //                    binding.currentMessage.text = post.content
 //                    binding.group.visibility = View.VISIBLE
 //                    setText(post.content)
 //                }
-            }
-        }
+//            }
+//        }
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) {state->
             adapter.submitList(state.posts)
@@ -122,13 +112,14 @@ class FeedFragment : Fragment() {
             viewModel.load()
         }
 
+        binding.swipe.setOnRefreshListener {
+            viewModel.load()
+            binding.swipe.isRefreshing = false
+        }
+
         binding.add.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
-
-//        binding.setOnClickListener {
-//            findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment)
-//        }
 
         return binding.root
     }
