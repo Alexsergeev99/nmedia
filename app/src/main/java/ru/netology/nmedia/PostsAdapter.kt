@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 interface onInteractionListener{
@@ -54,7 +57,9 @@ private val onInteractionListener: onInteractionListener
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
-            data.text = post.published
+//            data.text = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
+//                .format(Date((post.published).toLong() * 1000).toString())
+            data.text = post.published.toString()
             mainText.text = post.content
             likes.isChecked = post.likedByMe
             binding.reposts.text = post.shares.toShortString()

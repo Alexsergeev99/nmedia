@@ -38,7 +38,7 @@ class FeedFragment : Fragment() {
 
         val adapter = PostsAdapter(object : onInteractionListener {
             override fun onLike(post: Post) {
-                viewModel.likeById(post)
+                viewModel.likeById(post.id)
             }
 
             override fun onShare(post: Post) {
@@ -50,6 +50,10 @@ class FeedFragment : Fragment() {
                 }
                 val chooser = Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(chooser)
+            }
+
+            init {
+                viewModel.load()
             }
 
             override fun onRemove(post: Post) {

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -94,19 +95,28 @@ fun changeContent(content: String) {
     }
     edited.value = edited.value?.copy(content = text)
 }
-    fun likeById(post: Post): Post {
+    fun likeById(id: Long) {
         thread {
-            if (post.likedByMe) {
-                repository.likeById(post)
-                post.likedByMe != post.likedByMe
-                post.likes--
-            } else {
-                repository.likeById(post)
-                post.likedByMe != post.likedByMe
-                post.likes++
-            }
+//            if (post.likedByMe) {
+//                repository.likeById(post)
+//                _data.map {
+//
+//                }
+//                post.likedByMe != post.likedByMe
+//                post.likes--
+//            } else {
+//                repository.likeById(post)
+//                post.likedByMe != post.likedByMe
+//                post.likes++
+//            }
+            val post = _data.value?.posts?.find { it.id == id }?: empty
+            _data.postValue(_data.value?.copy(
+                posts = _data.value?.posts.orEmpty().map {
+                    if (it.id == id) repository.likeById(post) else it
+                }
+            )
+            )
         }
-        return post
     }
     fun shareById(id: Long) = repository.shareById(id)
     fun removeById(id: Long) {
