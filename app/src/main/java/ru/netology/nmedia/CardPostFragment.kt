@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
@@ -27,9 +28,7 @@ class CardPostFragment : Fragment() {
         var Bundle.idArg: Int? by IntArg
     }
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -59,7 +59,8 @@ private val onInteractionListener: onInteractionListener
             author.text = post.author
 //            data.text = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
 //                .format(Date((post.published).toLong() * 1000).toString())
-            data.text = post.published.toString()
+            data.text = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
+                .format(Date((post.published).toLong() * 1000))
             mainText.text = post.content
             likes.isChecked = post.likedByMe
             binding.reposts.text = post.shares.toShortString()

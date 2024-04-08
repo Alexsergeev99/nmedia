@@ -25,6 +25,7 @@ class NewPostFragment : Fragment() {
     }
 
     private val viewModel: PostViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

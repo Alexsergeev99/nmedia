@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.NewPostFragment.Companion.textArg
@@ -27,9 +28,7 @@ class EditPostFragment : Fragment() {
         var Bundle.idArg: Int? by IntArg
     }
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +56,10 @@ class EditPostFragment : Fragment() {
             viewModel.changeContent(binding.edit.text.toString())
             viewModel.save()
             AndroidUtils.hideKeyboard(requireView())
+        }
+
+        viewModel.postCreated.observe(viewLifecycleOwner) {
+            viewModel.load()
             findNavController().navigateUp()
         }
 

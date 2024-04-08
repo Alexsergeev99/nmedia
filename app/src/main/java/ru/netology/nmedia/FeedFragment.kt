@@ -11,6 +11,7 @@ import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
@@ -22,9 +23,8 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: PostViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,9 +52,9 @@ class FeedFragment : Fragment() {
                 startActivity(chooser)
             }
 
-            init {
-                viewModel.load()
-            }
+//            init {
+//                viewModel.load()
+//            }
 
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
