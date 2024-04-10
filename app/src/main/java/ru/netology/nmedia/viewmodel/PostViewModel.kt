@@ -103,7 +103,7 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
 
     fun removeById(id: Long) {
         repository.removeById(id, object : PostRepository.RemoveByIdCallback {
-            override fun onSuccess(id: Long) {
+            override fun onSuccess() {
                 _data.postValue(FeedModel(posts = _data.value?.posts.orEmpty().filter {
                     it.id != id }
                 )

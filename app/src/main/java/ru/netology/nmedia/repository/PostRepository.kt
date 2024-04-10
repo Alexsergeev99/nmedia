@@ -26,7 +26,7 @@ interface PostRepository {
     }
 
     interface RemoveByIdCallback{
-        fun onSuccess(id: Long)
+        fun onSuccess()
         fun onError(e: Exception)
     }
 }
