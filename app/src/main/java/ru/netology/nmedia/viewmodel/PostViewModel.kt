@@ -42,7 +42,7 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
     init {
         load()
     }
-    
+
     fun load() {
             _data.postValue(FeedModel(loading = true))
                 repository.getAll(object  : PostRepository.GetAllCallback {

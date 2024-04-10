@@ -66,5 +66,5 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     kapt "androidx.room:room-compiler:2.6.1"
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
-
+    implementation 'io.grpc:grpc-core:1.55.1'
 }
