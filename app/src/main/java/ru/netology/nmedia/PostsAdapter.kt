@@ -11,8 +11,11 @@ import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import okhttp3.MediaType.Companion.toMediaType
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,11 +57,14 @@ private val onInteractionListener: onInteractionListener
         else -> "MANY"
     }
 
+    private companion object{
+        const val BASE_URL = "http://10.0.2.2:9999"
+        private val jsonType = "application/json".toMediaType()
+    }
+
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
-//            data.text = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
-//                .format(Date((post.published).toLong() * 1000).toString())
             data.text = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.getDefault())
                 .format(Date((post.published).toLong() * 1000))
             mainText.text = post.content
@@ -90,6 +96,45 @@ private val onInteractionListener: onInteractionListener
                 onInteractionListener.onClick(post)
             }
 
+
+
+            val urlNetology = "${BASE_URL}/avatars/netology.jpg"
+            val urlTinkoff = "${BASE_URL}/avatars/tcs.jpg"
+            val urlSber = "${BASE_URL}/avatars/sber.jpg"
+
+            if(binding.author.text == "Netology") {
+                Glide.with(binding.avatar)
+                    .load(urlNetology)
+                    .circleCrop()
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.avatar)
+            } else if(binding.author.text == "Тинькофф") {
+                Glide.with(binding.avatar)
+                    .load(urlTinkoff)
+                    .circleCrop()
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.avatar)
+            } else if(binding.author.text == "Сбер") {
+                Glide.with(binding.avatar)
+                    .load(urlSber)
+                    .circleCrop()
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.avatar)
+            } else {
+                Glide.with(binding.avatar)
+                    .load(urlNetology)
+                    .circleCrop()
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.avatar)
+            }
 
 
             menu.setOnClickListener {
