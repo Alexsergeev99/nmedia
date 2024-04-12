@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -96,11 +97,11 @@ private val onInteractionListener: onInteractionListener
                 onInteractionListener.onClick(post)
             }
 
-
-
             val urlNetology = "${BASE_URL}/avatars/netology.jpg"
             val urlTinkoff = "${BASE_URL}/avatars/tcs.jpg"
             val urlSber = "${BASE_URL}/avatars/sber.jpg"
+            val urlNetologyAttachment = "${BASE_URL}/images/podcast.jpg"
+            val urlSberAttachment = "${BASE_URL}/images/sbercard.jpg"
 
             if(binding.author.text == "Netology") {
                 Glide.with(binding.avatar)
@@ -136,7 +137,24 @@ private val onInteractionListener: onInteractionListener
                     .into(binding.avatar)
             }
 
-
+            if(post.id.toInt() == 4) {
+                binding.attachment.isVisible = true
+                Glide.with(binding.attachment)
+                    .load(urlNetologyAttachment)
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.attachment)
+            }
+            if (post.id.toInt() == 5) {
+                binding.attachment.isVisible = true
+                Glide.with(binding.attachment)
+                    .load(urlSberAttachment)
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.attachment)
+            }
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
