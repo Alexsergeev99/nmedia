@@ -12,9 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.entity.PostEntity
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 

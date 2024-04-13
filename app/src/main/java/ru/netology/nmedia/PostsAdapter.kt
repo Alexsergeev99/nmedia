@@ -97,64 +97,24 @@ private val onInteractionListener: onInteractionListener
                 onInteractionListener.onClick(post)
             }
 
-            val urlNetology = "${BASE_URL}/avatars/netology.jpg"
-            val urlTinkoff = "${BASE_URL}/avatars/tcs.jpg"
-            val urlSber = "${BASE_URL}/avatars/sber.jpg"
-            val urlNetologyAttachment = "${BASE_URL}/images/podcast.jpg"
-            val urlSberAttachment = "${BASE_URL}/images/sbercard.jpg"
+                Glide.with(binding.avatar)
+                    .load("${BASE_URL}/avatars/${post.authorAvatar}")
+                    .circleCrop()
+                    .placeholder(R.drawable.image_loading)
+                    .error(R.drawable.image_error)
+                    .timeout(30000)
+                    .into(binding.avatar)
 
-            if(binding.author.text == "Netology") {
-                Glide.with(binding.avatar)
-                    .load(urlNetology)
-                    .circleCrop()
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_error)
-                    .timeout(30000)
-                    .into(binding.avatar)
-            } else if(binding.author.text == "Тинькофф") {
-                Glide.with(binding.avatar)
-                    .load(urlTinkoff)
-                    .circleCrop()
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_error)
-                    .timeout(30000)
-                    .into(binding.avatar)
-            } else if(binding.author.text == "Сбер") {
-                Glide.with(binding.avatar)
-                    .load(urlSber)
-                    .circleCrop()
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_error)
-                    .timeout(30000)
-                    .into(binding.avatar)
-            } else {
-                Glide.with(binding.avatar)
-                    .load(urlNetology)
-                    .circleCrop()
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_error)
-                    .timeout(30000)
-                    .into(binding.avatar)
-            }
-
-            if(post.id.toInt() == 4) {
+            if(post.attachment != null) {
                 binding.attachment.isVisible = true
                 Glide.with(binding.attachment)
-                    .load(urlNetologyAttachment)
+                    .load("${BASE_URL}/images/${post.attachment?.url}")
                     .placeholder(R.drawable.image_loading)
                     .error(R.drawable.image_error)
                     .timeout(30000)
                     .into(binding.attachment)
             }
-            if (post.id.toInt() == 5) {
-                binding.attachment.isVisible = true
-                Glide.with(binding.attachment)
-                    .load(urlSberAttachment)
-                    .placeholder(R.drawable.image_loading)
-                    .error(R.drawable.image_error)
-                    .timeout(30000)
-                    .into(binding.attachment)
-            }
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
