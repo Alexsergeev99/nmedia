@@ -1,6 +1,7 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,14 +45,13 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun load() {
-            _data.postValue(FeedModel(loading = true))
+            _data.value = FeedModel(loading = true)
                 repository.getAll(object  : PostRepository.GetAllCallback {
                  override fun onSuccess(posts: List<Post>) {
-                     _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+                     _data.value = FeedModel(posts = posts, empty = posts.isEmpty())
                  }
                     override fun onError(e: Exception) {
-                        _data.postValue(FeedModel(error = true)
-                        )
+                        _data.value = FeedModel(error = true)
                     }
                 })
     }
@@ -85,11 +85,10 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
         val post = _data.value?.posts?.find { it.id == id }?: empty
         repository.likeById(post, object : PostRepository.LikeByIdCallback {
             override fun onSuccess(post: Post) {
-                _data.postValue(_data.value?.copy(
+                _data.value = _data.value?.copy(
                     posts = _data.value?.posts.orEmpty().map {
                     if (it.id == id) post else it
                 }
-                )
                 )
             }
 
@@ -103,14 +102,13 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
 
     fun removeById(id: Long) {
         repository.removeById(id, object : PostRepository.RemoveByIdCallback {
-            override fun onSuccess() {
-                _data.postValue(FeedModel(posts = _data.value?.posts.orEmpty().filter {
+            override fun onSuccess(Unit: Unit) {
+                _data.value = FeedModel(posts = _data.value?.posts.orEmpty().filter {
                     it.id != id }
-                )
                 )
             }
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.value = FeedModel(error = true)
             }
         }
         )
