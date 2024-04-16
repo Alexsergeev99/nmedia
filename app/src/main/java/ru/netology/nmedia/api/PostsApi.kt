@@ -20,11 +20,12 @@ val BASE_URL = "http://10.0.2.2:9999/api/slow/"
 val retrofit = Retrofit.Builder()
     .client(
         OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        })
-        .build())
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
+    )
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .build()

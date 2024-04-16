@@ -6,9 +6,9 @@ import ru.netology.nmedia.dto.Post
 class PostRepositoryRoomImpl() : PostRepository {
 
     override fun getAll(callback: PostRepository.GetAllCallback) {
-       PostsApi.retrofitService.getAll()
+        PostsApi.retrofitService.getAll()
             .enqueue(
-                object  : retrofit2.Callback<List<Post>> {
+                object : retrofit2.Callback<List<Post>> {
 
                     override fun onFailure(call: retrofit2.Call<List<Post>>, t: Throwable) {
                         callback.onError(Exception(t))
@@ -28,10 +28,11 @@ class PostRepositoryRoomImpl() : PostRepository {
                 }
             )
     }
+
     override fun save(post: Post, callback: PostRepository.SaveCallback) {
-       PostsApi.retrofitService.save(post)
+        PostsApi.retrofitService.save(post)
             .enqueue(
-                object  : retrofit2.Callback<Post> {
+                object : retrofit2.Callback<Post> {
 
                     override fun onFailure(call: retrofit2.Call<Post>, t: Throwable) {
                         callback.onError(Exception(t))
@@ -105,7 +106,7 @@ class PostRepositoryRoomImpl() : PostRepository {
         PostsApi.retrofitService
             .removeById(id)
             .enqueue(
-                object  : retrofit2.Callback<Unit> {
+                object : retrofit2.Callback<Unit> {
 
                     override fun onFailure(call: retrofit2.Call<Unit>, t: Throwable) {
                         callback.onError(Exception(t))
