@@ -112,6 +112,11 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
         }
 
+//        viewModel.errorMessage.observe(viewLifecycleOwner) {state->
+//
+//            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
+//        }
+
         binding.retry.setOnClickListener {
             viewModel.load()
         }

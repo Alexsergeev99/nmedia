@@ -31,6 +31,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+//    val _errorMessage = MutableLiveData(Unit)
+//    val errorMessage: LiveData<Unit>
+//        get() = _errorMessage
 
     fun Int.toShortString(): String = when (this) {
         in 0..<1_000 -> this.toString()

@@ -12,6 +12,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.dto.Post
 import java.util.concurrent.TimeUnit
 
@@ -21,9 +22,15 @@ val retrofit = Retrofit.Builder()
     .client(
         OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(HttpLoggingInterceptor().apply {
+            .run {
+                if(BuildConfig.DEBUG) {
+                    addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
+                } else {
+                    this
+                }
+            }
             .build()
     )
     .baseUrl(BASE_URL)
