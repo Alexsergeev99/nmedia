@@ -112,7 +112,6 @@ class PostRepositoryRoomImpl() : PostRepository {
                     override fun onFailure(call: retrofit2.Call<Unit>, t: Throwable) {
                         callback.onError(Exception(t))
                     }
-
                     override fun onResponse(
                         call: retrofit2.Call<Unit>,
                         response: retrofit2.Response<Unit>
