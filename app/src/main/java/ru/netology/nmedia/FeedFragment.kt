@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
@@ -72,7 +73,7 @@ class FeedFragment : Fragment() {
                 viewModel.edit(post)
                 findNavController().navigate(
                     R.id.action_feedFragment_to_editPostFragment2,
-                            Bundle().apply {
+                    Bundle().apply {
                         textArg = post.content
                     })
 //                val intent = Intent().apply {
@@ -89,7 +90,7 @@ class FeedFragment : Fragment() {
 //                if (newPost) {
 //                    binding.list.smoothScrollToPosition(0)
 //                }
-            //}
+        //}
         //}
 
 //        viewModel.edited.observe(viewLifecycleOwner) { post ->
@@ -105,11 +106,19 @@ class FeedFragment : Fragment() {
 //            }
 //        }
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) {state->
+        viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
-            binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
+        }
+
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            binding.errorGroup.isVisible = state.error
             binding.progress.isVisible = state.loading
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry) { viewModel.load() }
+                    .show()
+            }
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) {
