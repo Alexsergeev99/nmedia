@@ -40,61 +40,61 @@ class CardPostFragment : Fragment() {
             container,
             false
         )
-            val postId: Long = (arguments?.idArg ?: -1).toLong()
-            viewModel.data.observe(viewLifecycleOwner) { state ->
-                val posts = state.posts
-                posts.find { it.id == postId }?.let { post ->
+        val postId: Long = (arguments?.idArg ?: -1).toLong()
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            val posts = state.posts
+            posts.find { it.id == postId }?.let { post ->
 
-                        PostViewHolder(binding.singlePost, object : onInteractionListener {
+                PostViewHolder(binding.singlePost, object : onInteractionListener {
 
-                            override fun onLike(post: Post) {
-                                viewModel.likeById(post.id)
-                            }
-
-                            override fun onShare(post: Post) {
-                                viewModel.shareById(post.id)
-                                val intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    type = "text/plain"
-                                    putExtra(Intent.EXTRA_TEXT, post.content)
-                                }
-                                val chooser =
-                                    Intent.createChooser(
-                                        intent,
-                                        getString(R.string.chooser_share_post)
-                                    )
-                                startActivity(chooser)
-                            }
-
-                            override fun onRemove(post: Post) {
-                                viewModel.removeById(post.id)
-                                findNavController().navigateUp()
-                            }
-
-                            override fun onClick(post: Post) {
-//                        findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment)
-                            }
-
-                            override fun onEdit(post: Post) {
-                                viewModel.edit(post)
-                                findNavController().navigate(
-                                    R.id.action_cardPostFragment_to_editPostFragment2,
-                                    Bundle().apply {
-                                        textArg = post.content
-                                    })
-                            }
-                        }).bind(post)
+                    override fun onLike(post: Post) {
+                        viewModel.likeById(post.id)
                     }
-                }
-                requireActivity().onBackPressedDispatcher.addCallback(
-                    viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                        override fun handleOnBackPressed() {
-                            AlertDialog.Builder(requireActivity()).apply {
-                                findNavController().navigateUp()
-                            }.create().show()
+
+                    override fun onShare(post: Post) {
+                        viewModel.shareById(post.id)
+                        val intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, post.content)
                         }
+                        val chooser =
+                            Intent.createChooser(
+                                intent,
+                                getString(R.string.chooser_share_post)
+                            )
+                        startActivity(chooser)
                     }
-                )
-            return binding.root
+
+                    override fun onRemove(post: Post) {
+                        viewModel.removeById(post.id)
+                        findNavController().navigateUp()
+                    }
+
+                    override fun onClick(post: Post) {
+//                        findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment)
+                    }
+
+                    override fun onEdit(post: Post) {
+                        viewModel.edit(post)
+                        findNavController().navigate(
+                            R.id.action_cardPostFragment_to_editPostFragment2,
+                            Bundle().apply {
+                                textArg = post.content
+                            })
+                    }
+                }).bind(post)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    AlertDialog.Builder(requireActivity()).apply {
+                        findNavController().navigateUp()
+                    }.create().show()
+                }
+            }
+        )
+        return binding.root
     }
 }

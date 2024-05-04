@@ -24,7 +24,6 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
         try {
             val response = PostsApi.retrofitService.getAll()
             if (!response.isSuccessful) {
-                Log.d("error here", "error here")
                 throw ApiError(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
@@ -38,12 +37,12 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
 
     override suspend fun likeById(id: Long) {
         try {
+            dao.likeById(id)
             val response = PostsApi.retrofitService.likeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.likeById(id)
+//            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -54,12 +53,12 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
     override suspend fun shareById(id: Long) = TODO()
     override suspend fun removeById(id: Long) {
         try {
+            dao.removeById(id)
             val response = PostsApi.retrofitService.removeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.removeById(id)
+//            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.util.AndroidUtils
@@ -45,6 +47,19 @@ class NewPostFragment : Fragment() {
             viewModel.changeContent(binding.edit.text.toString())
             viewModel.save()
             AndroidUtils.hideKeyboard(requireView())
+        }
+
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            binding.errorGroup.isVisible = state.error
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry) { viewModel.load() }
+                    .show()
+            }
+        }
+
+        binding.retry.setOnClickListener {
+            viewModel.load()
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
