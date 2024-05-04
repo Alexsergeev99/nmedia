@@ -20,6 +20,7 @@ import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -85,13 +86,17 @@ class FeedFragment : Fragment() {
             }
         }
         )
-//            val newPost = adapter.currentList.size < posts.size
-//            adapter.submitList(posts) //{
-//                if (newPost) {
-//                    binding.list.smoothScrollToPosition(0)
-//                }
         //}
-        //}
+
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            val isNewPost = state.posts.size > adapter.currentList.size
+            adapter.submitList(state.posts) {
+                if (isNewPost) {
+                    binding.list.smoothScrollToPosition(0)
+                }
+            }
+            binding.emptyText.isVisible = state.empty
+        }
 
 //        viewModel.edited.observe(viewLifecycleOwner) { post ->
 //            if (post.id == 0L) {
@@ -112,18 +117,19 @@ class FeedFragment : Fragment() {
         }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
-            binding.errorGroup.isVisible = state.error
+//            binding.errorGroup.isVisible = state.error
             binding.progress.isVisible = state.loading
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_LONG)
                     .setAction(R.string.retry) { viewModel.load() }
+                    .setAnchorView(binding.add)
                     .show()
             }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) {
-            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
-        }
+//        viewModel.errorMessage.observe(viewLifecycleOwner) {
+//            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
+//        }
 
         binding.retry.setOnClickListener {
             viewModel.load()

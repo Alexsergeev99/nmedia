@@ -148,6 +148,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="errorText, retry"
+        android:visibility="gone"
         />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
