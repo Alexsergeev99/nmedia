@@ -43,7 +43,6 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
                 dao.likeById(id)
                 throw ApiError(response.code(), response.message())
             }
-//            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             dao.likeById(id)
             throw NetworkError
@@ -60,15 +59,14 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
             dao.removeById(id)
             val response = PostsApi.retrofitService.removeById(id)
             if (!response.isSuccessful) {
-                dao.save(removedPost)
+                dao.insert(removedPost)
                 throw ApiError(response.code(), response.message())
             }
-//            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
-            dao.save(removedPost)
+            dao.insert(removedPost)
             throw NetworkError
         } catch (e: Exception) {
-            dao.save(removedPost)
+            dao.insert(removedPost)
             throw UnknownError
         }
     }
