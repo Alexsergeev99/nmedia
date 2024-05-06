@@ -88,15 +88,6 @@ class FeedFragment : Fragment() {
         )
         //}
 
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            val isNewPost = state.posts.size > adapter.currentList.size
-            adapter.submitList(state.posts) {
-                if (isNewPost) {
-                    binding.list.smoothScrollToPosition(0)
-                }
-            }
-            binding.emptyText.isVisible = state.empty
-        }
 
 //        viewModel.edited.observe(viewLifecycleOwner) { post ->
 //            if (post.id == 0L) {
@@ -112,10 +103,14 @@ class FeedFragment : Fragment() {
 //        }
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
+            val isNewPost = state.posts.size > adapter.currentList.size
+            adapter.submitList(state.posts) {
+                if (isNewPost) {
+                    binding.list.smoothScrollToPosition(0)
+                }
+                binding.emptyText.isVisible = state.empty
+            }
         }
-
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
 //            binding.errorGroup.isVisible = state.error
             binding.progress.isVisible = state.loading

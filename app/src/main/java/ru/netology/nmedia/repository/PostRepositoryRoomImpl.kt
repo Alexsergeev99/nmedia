@@ -45,24 +45,30 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
             }
 //            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
+            dao.likeById(id)
             throw NetworkError
         } catch (e: Exception) {
+            dao.likeById(id)
             throw UnknownError
         }
     }
 
     override suspend fun shareById(id: Long) = TODO()
     override suspend fun removeById(id: Long) {
+        val removedPost = dao.getPostById(id)
         try {
             dao.removeById(id)
             val response = PostsApi.retrofitService.removeById(id)
             if (!response.isSuccessful) {
+                dao.save(removedPost)
                 throw ApiError(response.code(), response.message())
             }
 //            val body = response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
+            dao.save(removedPost)
             throw NetworkError
         } catch (e: Exception) {
+            dao.save(removedPost)
             throw UnknownError
         }
     }
