@@ -5,8 +5,12 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
@@ -32,7 +36,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryRoomImpl(AppDb.getInstance(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+    val data: LiveData<FeedModel> = repository.data
+        .map(::FeedModel)
+        .asLiveData(Dispatchers.Default)
     val edited = MutableLiveData(empty)
     private val _dataState = MutableLiveData(FeedModelState())
     val dataState: LiveData<FeedModelState>
@@ -43,6 +49,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val _errorMessage = SingleLiveEvent<Unit>()
     val errorMessage: LiveData<Unit>
         get() = _errorMessage
+
+    val newerCount: LiveData<Int> = data.switchMap {
+        val newerId = it.posts.firstOrNull()?.id ?: 0L
+        repository.getNewerCount(newerId).asLiveData(Dispatchers.Default)
+    }
 
     fun Int.toShortString(): String = when (this) {
         in 0..<1_000 -> this.toString()
@@ -128,6 +139,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _dataState.value = FeedModelState(error = true)
             }
 
+        }
+    }
+
+    fun showNewPosts() = viewModelScope.launch {
+        try {
+            repository.showAll()
+            load()
+        } catch (e: Exception) {
+            throw e
         }
     }
 }

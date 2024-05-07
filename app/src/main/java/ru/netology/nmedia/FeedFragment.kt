@@ -3,6 +3,7 @@ package ru.netology.nmedia
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,18 +90,15 @@ class FeedFragment : Fragment() {
         //}
 
 
-//        viewModel.edited.observe(viewLifecycleOwner) { post ->
-//            if (post.id == 0L) {
-//                return@observe
-//            } else {
-//                with(binding.content) {
-//                    requestFocus()
-//                    binding.currentMessage.text = post.content
-//                    binding.group.visibility = View.VISIBLE
-//                    setText(post.content)
-//                }
-//            }
-//        }
+        viewModel.newerCount.observe(viewLifecycleOwner) {
+            binding.newPosts.isVisible = true
+            binding.newPosts.setOnClickListener {
+                binding.newPosts.isVisible = false
+                binding.list.smoothScrollToPosition(0)
+                viewModel.showNewPosts()
+            }
+        }
+
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { state ->
             val isNewPost = state.posts.size > adapter.currentList.size
@@ -121,10 +119,6 @@ class FeedFragment : Fragment() {
                     .show()
             }
         }
-
-//        viewModel.errorMessage.observe(viewLifecycleOwner) {
-//            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
-//        }
 
         binding.retry.setOnClickListener {
             viewModel.load()

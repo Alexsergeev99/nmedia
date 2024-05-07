@@ -25,5 +25,6 @@
     <string name="empty_post" translatable="false">There are no posts.\nIf you create a new post, it will appear here</string>
     <string name="error_text" translatable="false">Something went wrong</string>
     <string name="retry" translatable="false">Retry</string>
+    <string name="new_posts">New posts</string>
 
 </resources>

@@ -4,6 +4,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import okhttp3.Dispatcher
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.api.PostsApiService
 import ru.netology.nmedia.dao.PostDao
@@ -15,10 +23,13 @@ import ru.netology.nmedia.errors.ApiError
 import ru.netology.nmedia.errors.NetworkError
 import ru.netology.nmedia.errors.UnknownError
 import java.io.IOException
+import kotlin.time.Duration.Companion.seconds
 
 class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
 
-    override val data = dao.getAll().map(List<PostEntity>::toDto)
+    override val data = dao.getAll()
+        .map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
         try {
@@ -84,5 +95,26 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
         } catch (e: Exception) {
             throw UnknownError
         }
+    }
+
+    override fun getNewerCount(newerId: Long): Flow<Int> = flow {
+        while (true) {
+                delay(10.seconds)
+            try {
+                val response = PostsApi.retrofitService.getNewer(newerId)
+                val body = response.body() ?: continue
+                dao.getAllNewer()
+                dao.insert(body.toEntity(false))
+                emit(body.size)
+            } catch (e:CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    override suspend fun showAll() {
+        dao.showAll()
     }
 }

@@ -151,4 +151,17 @@
         android:visibility="gone"
         />
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/new_posts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/new_posts"
+        android:text="@string/new_posts"
+        app:icon="@drawable/baseline_keyboard_control_key_24"
+        android:visibility="gone"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ data class Post(
     val likedByMe: Boolean = false,
     val shares: Int = 0,
     val video: String? = null,
+    val visibility: Boolean = true,
     var attachment: Attachment? = null,
     )
 
