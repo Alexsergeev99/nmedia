@@ -72,6 +72,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         try {
             _dataState.value = FeedModelState(loading = true)
             repository.getAll()
+            repository.showAll()
 //            _data.value = FeedModel(posts = posts, empty = posts.isEmpty())
             _dataState.value = FeedModelState()
         } catch (e: Exception) {

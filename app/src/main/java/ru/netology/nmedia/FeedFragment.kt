@@ -127,6 +127,7 @@ class FeedFragment : Fragment() {
         binding.swipe.setOnRefreshListener {
             viewModel.load()
             binding.swipe.isRefreshing = false
+            binding.newPosts.isVisible = false
         }
 
         binding.add.setOnClickListener {

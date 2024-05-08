@@ -27,7 +27,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
 
-    override val data = dao.getAll()
+    override val data = dao.getAllNewer()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
@@ -99,14 +99,14 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
 
     override fun getNewerCount(newerId: Long): Flow<Int> = flow {
         while (true) {
-                delay(10.seconds)
+            delay(10.seconds)
             try {
                 val response = PostsApi.retrofitService.getNewer(newerId)
                 val body = response.body() ?: continue
-                dao.getAllNewer()
+//                dao.getAllNewer()
                 dao.insert(body.toEntity(false))
                 emit(body.size)
-            } catch (e:CancellationException) {
+            } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 throw e

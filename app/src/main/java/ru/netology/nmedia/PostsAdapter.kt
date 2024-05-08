@@ -118,6 +118,8 @@ class PostViewHolder(
                     .error(R.drawable.image_error)
                     .timeout(30000)
                     .into(binding.attachment)
+            } else {
+                binding.attachment.isVisible = false
             }
 
             menu.setOnClickListener {
