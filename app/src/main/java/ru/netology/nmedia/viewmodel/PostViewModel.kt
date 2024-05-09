@@ -73,7 +73,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(loading = true)
             repository.getAll()
             repository.showAll()
-//            _data.value = FeedModel(posts = posts, empty = posts.isEmpty())
             _dataState.value = FeedModelState()
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
@@ -146,7 +145,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun showNewPosts() = viewModelScope.launch {
         try {
             repository.showAll()
-            load()
         } catch (e: Exception) {
             throw e
         }

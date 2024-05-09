@@ -103,8 +103,7 @@ class PostRepositoryRoomImpl(private val dao: PostDao) : PostRepository {
             try {
                 val response = PostsApi.retrofitService.getNewer(newerId)
                 val body = response.body() ?: continue
-//                dao.getAllNewer()
-                dao.insert(body.toEntity(false))
+                dao.insertInBackground(body.toEntity(false))
                 emit(body.size)
             } catch (e: CancellationException) {
                 throw e

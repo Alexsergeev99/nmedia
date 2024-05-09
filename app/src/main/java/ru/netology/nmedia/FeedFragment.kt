@@ -55,10 +55,6 @@ class FeedFragment : Fragment() {
                 startActivity(chooser)
             }
 
-//            init {
-//                viewModel.load()
-//            }
-
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
             }
