@@ -8,8 +8,8 @@
     <string name="_5" translatable="false">5</string>
     <string name="_30" translatable="false">30</string>
     <string name="_0" translatable="false">0</string>
-    <string name="remove">remove</string>
-    <string name="edit">edit</string>
+    <string name="remove">Remove</string>
+    <string name="edit">Edit</string>
     <string name="edit_message">Edit Message</string>
     <string name="post_text">Post Text</string>
     <string name="chooser_share_post">Share Post</string>
@@ -26,5 +26,9 @@
     <string name="error_text" translatable="false">Something went wrong</string>
     <string name="retry" translatable="false">Retry</string>
     <string name="new_posts">New posts</string>
+    <string name="save">Save</string>
+    <string name="photo">Photo</string>
+    <string name="select_photo">Select photo</string>
+    <string name="take_photo">Take photo</string>
 
 </resources>

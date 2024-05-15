@@ -16,4 +16,8 @@
     <string name="channel_remote_description">Уведомления с удаленного сервера</string>
     <string name="notification_new_post">Пользователь %1$s добавил %2$s\'s пост</string>
     <string name="new_posts">Свежие записи</string>
+    <string name="save">Сохранить</string>
+    <string name="photo">Фото</string>
+    <string name="select_photo">Выбрать фото</string>
+    <string name="take_photo">Сделать фото</string>
 </resources>
