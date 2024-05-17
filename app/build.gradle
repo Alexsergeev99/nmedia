@@ -43,6 +43,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+//    buildToolsVersion '33.0.1'
 }
 
 dependencies {
@@ -78,5 +79,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.10.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
     implementation "androidx.room:room-ktx:2.6.1"
-//    implementation ("com.github.dhaval2404:imagepicker:2.1")
+//    implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
 }

@@ -1,12 +1,11 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
-import android.util.Log
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +15,11 @@ import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
+import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import java.io.File
 
 private val empty = Post(
     id = 0,
@@ -33,6 +34,7 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
+    private val noPhoto = PhotoModel()
     private val repository: PostRepository =
         PostRepositoryRoomImpl(AppDb.getInstance(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
@@ -49,6 +51,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val _errorMessage = SingleLiveEvent<Unit>()
     val errorMessage: LiveData<Unit>
         get() = _errorMessage
+    private val _photo = MutableLiveData<PhotoModel>(noPhoto)
+    val photo: LiveData<PhotoModel>
+        get() = _photo
 
     val newerCount: LiveData<Int> = data.switchMap {
         val newerId = it.posts.firstOrNull()?.id ?: 0L
@@ -148,5 +153,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    fun changePhoto(uri: Uri?, file: File?) {
+        _photo.value = PhotoModel(uri, file)
     }
 }

@@ -1,5 +1,6 @@
 package ru.netology.nmedia
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -7,6 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -40,6 +44,22 @@ class NewPostFragment : Fragment() {
 
         arguments?.textArg?.let(binding.edit::setText)
 
+//        val pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        when (it.resultCode) {
+//            ImagePicker.RESULT_ERROR -> {
+//                Snackbar.make(
+//                    binding.root,
+//                    ImagePicker.getError(it.data),
+//                    Snackbar.LENGTH_LONG
+//                ).show()
+//            }
+//            Activity.RESULT_OK -> {
+//                val uri = it.data?.data
+//                viewModel.changePhoto(uri, uri?.toFile())
+//            }
+//        }
+//    }
+
         binding.edit.requestFocus()
 
         requireActivity().addMenuProvider(object : MenuProvider {
@@ -62,7 +82,7 @@ class NewPostFragment : Fragment() {
         }, viewLifecycleOwner)
 
 //        binding.pickPhoto.setOnClickListener {
-//            ImagePicker.with(this)
+//           ImagePicker.with(this)
 //                .crop()
 //                .compress(2048)
 //                .provider(ImageProvider.GALLERY)
@@ -95,6 +115,14 @@ class NewPostFragment : Fragment() {
 
         binding.retry.setOnClickListener {
             viewModel.load()
+        }
+        binding.removePhoto.setOnClickListener {
+            viewModel.changePhoto(null, null)
+        }
+
+        viewModel.photo.observe(viewLifecycleOwner) {
+            binding.photoContainer.isVisible = it.uri != null
+            binding.photo.setImageURI(it.uri)
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {

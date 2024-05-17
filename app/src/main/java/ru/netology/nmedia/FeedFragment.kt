@@ -1,19 +1,13 @@
 package ru.netology.nmedia
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.launch
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
@@ -21,7 +15,6 @@ import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -65,6 +58,14 @@ class FeedFragment : Fragment() {
                         textArg1 = post.content
                         idArg = post.id.toInt()
                     })
+            }
+
+            override fun onClickPhoto(post: Post) {
+                findNavController().navigate(R.id.action_feedFragment_to_photoFragment,
+                    Bundle().apply {
+                        textArg = post.attachment?.url
+                    }
+                )
             }
 
             override fun onEdit(post: Post) {

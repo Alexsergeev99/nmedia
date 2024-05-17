@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +14,9 @@ import com.bumptech.glide.Glide
 import okhttp3.MediaType.Companion.toMediaType
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 
 interface onInteractionListener {
     fun onLike(post: Post)
@@ -28,6 +24,7 @@ interface onInteractionListener {
     fun onRemove(post: Post)
     fun onEdit(post: Post)
     fun onClick(post: Post)
+    fun onClickPhoto(post: Post)
 }
 
 
@@ -101,6 +98,9 @@ class PostViewHolder(
             root.setOnClickListener {
                 onInteractionListener.onClick(post)
             }
+            attachment.setOnClickListener {
+                onInteractionListener.onClickPhoto(post)
+            }
 
             Glide.with(binding.avatar)
                 .load("${BASE_URL}/avatars/${post.authorAvatar}")
@@ -113,7 +113,7 @@ class PostViewHolder(
             if (post.attachment != null) {
                 binding.attachment.isVisible = true
                 Glide.with(binding.attachment)
-                    .load("${BASE_URL}/images/${post.attachment?.url}")
+                    .load("${BASE_URL}/media/${post.attachment?.url}")
                     .placeholder(R.drawable.image_loading)
                     .error(R.drawable.image_error)
                     .timeout(30000)
