@@ -121,7 +121,8 @@ class NewPostFragment : Fragment() {
         }
 
         viewModel.photo.observe(viewLifecycleOwner) {
-            binding.photoContainer.isVisible = it.uri != null
+            binding.photo.isVisible = it.uri != null
+            binding.removePhoto.isVisible = it.uri != null
             binding.photo.setImageURI(it.uri)
         }
 
