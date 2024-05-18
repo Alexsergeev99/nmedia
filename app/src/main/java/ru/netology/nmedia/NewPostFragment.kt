@@ -1,6 +1,5 @@
 package ru.netology.nmedia
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,15 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.cast.framework.media.ImagePicker
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.util.AndroidUtils
@@ -75,6 +70,7 @@ class NewPostFragment : Fragment() {
                         AndroidUtils.hideKeyboard(requireView())
                         true
                     }
+
                     else -> false
                 }
             }
@@ -124,6 +120,12 @@ class NewPostFragment : Fragment() {
             binding.photo.isVisible = it.uri != null
             binding.removePhoto.isVisible = it.uri != null
             binding.photo.setImageURI(it.uri)
+        }
+        
+        binding.ok.setOnClickListener {
+            viewModel.changeContent(binding.edit.text.toString())
+            viewModel.save()
+            AndroidUtils.hideKeyboard(requireView())
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
