@@ -82,4 +82,5 @@ dependencies {
 //    implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    implementation(name: 'ImagePicker-v2.1', ext: 'aar')
 }

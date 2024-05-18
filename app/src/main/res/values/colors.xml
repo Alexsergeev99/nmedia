@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- uCrop library colors -->
+    <color name="ucrop_color_widget_active">#FF0000</color>
+    <color name="ucrop_color_widget_inactive">#FFFFFF</color>
+    <color name="ucrop_color_toolbar">#FF0000</color>
+    <color name="ucrop_color_statusbar">#FF0000</color>
 </resources>
