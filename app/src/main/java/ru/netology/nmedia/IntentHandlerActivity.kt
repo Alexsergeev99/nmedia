@@ -1,6 +1,7 @@
 package ru.netology.nmedia
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -25,6 +26,7 @@ import ru.netology.nmedia.databinding.ActivityIntentHandlerBinding
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler) {
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationsPermission()
