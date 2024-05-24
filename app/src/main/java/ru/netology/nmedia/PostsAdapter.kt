@@ -122,6 +122,7 @@ class PostViewHolder(
                 binding.attachment.isVisible = false
             }
 
+
             menu.isVisible = post.ownedByMe
 
             menu.setOnClickListener {

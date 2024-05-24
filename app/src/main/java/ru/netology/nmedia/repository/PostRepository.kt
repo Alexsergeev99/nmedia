@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.User
 
 interface PostRepository {
     val data: Flow<List<Post>>
@@ -18,4 +19,5 @@ interface PostRepository {
     fun getNewerCount(newerId: Long): Flow<Int>
     suspend fun showAll()
     suspend fun upload(upload: MediaUpload): Media
+    suspend fun uploadUser(login: String, password:String)
 }

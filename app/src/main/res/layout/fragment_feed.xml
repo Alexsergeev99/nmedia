@@ -24,7 +24,6 @@
         />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <ImageView
         android:id="@+id/editedText"
         android:layout_width="24dp"

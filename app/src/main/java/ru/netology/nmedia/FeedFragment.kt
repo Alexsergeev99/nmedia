@@ -3,23 +3,34 @@ package ru.netology.nmedia
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
+import ru.netology.nmedia.viewmodel.UserViewModel
 
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
+    val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +96,49 @@ class FeedFragment : Fragment() {
         }
         )
         //}
+        var currentMenuProvider: MenuProvider? = null
 
+        authViewModel.auth.observe(viewLifecycleOwner) {
+            val authorized = authViewModel.authorized
+
+//            currentMenuProvider?.let {
+//                requireActivity().removeMenuProvider(it)
+//            }
+            currentMenuProvider?.let(requireActivity()::removeMenuProvider)
+
+            requireActivity().addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.auth_menu, menu)
+
+                    menu.setGroupVisible(R.id.auth, authorized)
+                    menu.setGroupVisible(R.id.unauth, !authorized)
+
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+                    when(menuItem.itemId) {
+                        R.id.sign_in -> {
+                            findNavController().navigate(R.id.action_feedFragment_to_regFragment,
+                                Bundle().apply {
+                                    textArg = getString(R.string.sign_in)
+                                })
+                            true
+                        }
+                        R.id.sign_up -> {
+                            AppAuth.getInstance().setAuth(5, "x-token")
+                            true
+                        }
+                        R.id.logout -> {
+                            AppAuth.getInstance().clearAuth()
+                            true
+                        } else -> {
+                        false
+                    }
+                    }
+            }.apply {
+                currentMenuProvider = this
+            }, viewLifecycleOwner)
+        }
 
         viewModel.newerCount.observe(viewLifecycleOwner) {
             binding.newPosts.isVisible = true
