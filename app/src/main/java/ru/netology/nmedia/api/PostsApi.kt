@@ -20,6 +20,7 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.Token
 import ru.netology.nmedia.dto.User
 import java.util.concurrent.TimeUnit
 
@@ -83,7 +84,7 @@ interface PostsApiService {
 
     @FormUrlEncoded
     @POST("users/authentication")
-    suspend fun uploadUser(@Field("login") login: String, @Field("pass") pass: String): Response<User>
+    suspend fun uploadUser(@Field("login") login: String, @Field("pass") pass: String): Response<Token>
 }
 
 object PostsApi {
