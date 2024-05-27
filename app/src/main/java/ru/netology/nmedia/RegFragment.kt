@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.CoroutineScope
@@ -28,19 +29,17 @@ class RegFragment : Fragment() {
             container,
             false
         )
-        val login = binding.login.toString()
-        val password = binding.passwordReg.toString()
-        val scope = CoroutineScope(EmptyCoroutineContext)
-
-        val rightData = arguments?.textArg == getString(R.string.sign_in)
 
         binding.enter.setOnClickListener {
-            if (rightData) {
-                scope.launch {
-                    viewModel.uploadUser(login, password)
-                }
-                findNavController().navigateUp()
+            val login = binding.login.text.toString()
+            val password = binding.passwordReg.text.toString()
+            val scope = CoroutineScope(EmptyCoroutineContext)
+            scope.launch {
+                viewModel.uploadUser(login, password)
             }
+            findNavController().navigateUp()
+//                Toast.makeText(context, "Authorization failed", Toast.LENGTH_LONG).show()
+//                findNavController().navigateUp()
         }
         return binding.root
     }

@@ -8,13 +8,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
@@ -25,7 +24,6 @@ import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
-import ru.netology.nmedia.viewmodel.UserViewModel
 
 class FeedFragment : Fragment() {
 
@@ -43,9 +41,26 @@ class FeedFragment : Fragment() {
             false
         )
 
+        val dialog = context?.let { AlertDialog.Builder(it) }
+        dialog?.setTitle("Войдите, чтобы продолжить")
+            ?.setCancelable(true)
+            ?.setPositiveButton("Sign in") { _, _ ->
+                findNavController().navigate(R.id.action_feedFragment_to_regFragment)
+            }
+            ?.setNegativeButton(
+                "Cancel"
+            ) { _, _ ->
+                findNavController().navigateUp()
+            }
+        dialog?.create()
+
         val adapter = PostsAdapter(object : onInteractionListener {
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (authViewModel.authorized) {
+                    viewModel.likeById(post.id)
+                } else {
+                    dialog?.show()
+                }
             }
 
             override fun onShare(post: Post) {
@@ -116,7 +131,7 @@ class FeedFragment : Fragment() {
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-                    when(menuItem.itemId) {
+                    when (menuItem.itemId) {
                         R.id.sign_in -> {
                             findNavController().navigate(R.id.action_feedFragment_to_regFragment,
                                 Bundle().apply {
@@ -124,16 +139,20 @@ class FeedFragment : Fragment() {
                                 })
                             true
                         }
+
                         R.id.sign_up -> {
                             AppAuth.getInstance().setAuth(5, "x-token")
                             true
                         }
+
                         R.id.logout -> {
                             AppAuth.getInstance().clearAuth()
                             true
-                        } else -> {
-                        false
-                    }
+                        }
+
+                        else -> {
+                            false
+                        }
                     }
             }.apply {
                 currentMenuProvider = this
@@ -181,7 +200,11 @@ class FeedFragment : Fragment() {
         }
 
         binding.add.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (authViewModel.authorized) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            } else {
+                dialog?.show()
+            }
         }
 
         return binding.root

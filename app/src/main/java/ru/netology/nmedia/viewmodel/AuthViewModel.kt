@@ -10,9 +10,6 @@ import kotlinx.coroutines.launch
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Token
-import ru.netology.nmedia.errors.ApiError
-import ru.netology.nmedia.errors.NetworkError
-import ru.netology.nmedia.errors.UnknownError
 import java.io.IOException
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,16 +27,16 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 val response = PostsApi.retrofitService.uploadUser(login, password)
 
                 if (!response.isSuccessful) {
-                    throw ApiError(response.code(), response.message())
+                    _data.value = 1
                 } else {
                     token = response.body() ?: Token(id = 0, token = "")
                     AppAuth.getInstance().setAuth(token.id, token.token)
                     _data.value = 0
                 }
             } catch (e: IOException) {
-                throw NetworkError
+                _data.value = 2
             } catch (e: Exception) {
-                throw UnknownError
+                _data.value = 3
             }
         }
     }
