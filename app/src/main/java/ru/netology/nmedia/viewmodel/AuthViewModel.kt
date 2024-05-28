@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.Api
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Token
 import java.io.IOException
@@ -24,7 +24,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val token: Token
             try {
-                val response = PostsApi.retrofitService.uploadUser(login, password)
+                val response = Api.retrofitService.uploadUser(login, password)
 
                 if (!response.isSuccessful) {
                     _data.value = 1

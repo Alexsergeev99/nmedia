@@ -20,8 +20,8 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
-import ru.netology.nmedia.dto.User
 import java.util.concurrent.TimeUnit
 
 val BASE_URL = "http://10.0.2.2:9999/api/slow/"
@@ -59,7 +59,7 @@ val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
-interface PostsApiService {
+interface ApiService {
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
 
@@ -85,10 +85,13 @@ interface PostsApiService {
     @FormUrlEncoded
     @POST("users/authentication")
     suspend fun uploadUser(@Field("login") login: String, @Field("pass") pass: String): Response<Token>
+
+    @POST("users/push-tokens")
+    suspend fun pushToken(@Body token: PushToken): Response<Unit>
 }
 
-object PostsApi {
-    val retrofitService: PostsApiService by lazy {
+object Api {
+    val retrofitService: ApiService by lazy {
         retrofit.create()
     }
 }

@@ -25,3 +25,4 @@ data class Attachment (
     val type: AttachmentType,
 )
 
+data class PushToken(val token: String)
