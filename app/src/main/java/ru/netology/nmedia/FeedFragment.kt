@@ -3,13 +3,9 @@ package ru.netology.nmedia
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
@@ -42,13 +37,13 @@ class FeedFragment : Fragment() {
         )
 
         val dialog = context?.let { AlertDialog.Builder(it) }
-        dialog?.setTitle("Войдите, чтобы продолжить")
+        dialog?.setTitle(R.string.enterToContinue)
             ?.setCancelable(true)
-            ?.setPositiveButton("Sign in") { _, _ ->
+            ?.setPositiveButton(R.string.sign_in) { _, _ ->
                 findNavController().navigate(R.id.action_feedFragment_to_regFragment)
             }
             ?.setNegativeButton(
-                "Cancel"
+                R.string.cancel
             ) { _, _ ->
                 findNavController().navigateUp()
             }
@@ -111,53 +106,6 @@ class FeedFragment : Fragment() {
         }
         )
         //}
-        var currentMenuProvider: MenuProvider? = null
-
-        authViewModel.auth.observe(viewLifecycleOwner) {
-            val authorized = authViewModel.authorized
-
-//            currentMenuProvider?.let {
-//                requireActivity().removeMenuProvider(it)
-//            }
-            currentMenuProvider?.let(requireActivity()::removeMenuProvider)
-
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.auth_menu, menu)
-
-                    menu.setGroupVisible(R.id.auth, authorized)
-                    menu.setGroupVisible(R.id.unauth, !authorized)
-
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-                    when (menuItem.itemId) {
-                        R.id.sign_in -> {
-                            findNavController().navigate(R.id.action_feedFragment_to_regFragment,
-                                Bundle().apply {
-                                    textArg = getString(R.string.sign_in)
-                                })
-                            true
-                        }
-
-                        R.id.sign_up -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
-                            true
-                        }
-
-                        R.id.logout -> {
-                            AppAuth.getInstance().clearAuth()
-                            true
-                        }
-
-                        else -> {
-                            false
-                        }
-                    }
-            }.apply {
-                currentMenuProvider = this
-            }, viewLifecycleOwner)
-        }
 
         viewModel.newerCount.observe(viewLifecycleOwner) {
             binding.newPosts.isVisible = true

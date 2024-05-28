@@ -36,29 +36,24 @@ class NewPostFragment : Fragment() {
     private val viewModel: PostViewModel by activityViewModels()
     val authViewModel: AuthViewModel by viewModels()
 
-
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentNewPostBinding.inflate(
-            inflater,
-            container,
-            false
+            inflater, container, false
         )
 
         arguments?.textArg?.let(binding.edit::setText)
 
         val cancelDialog = context?.let { AlertDialog.Builder(it) }
-        cancelDialog?.setTitle("Вы действительно хотите выйти?")
+        cancelDialog
+            ?.setTitle(R.string.areYouSure)
             ?.setCancelable(true)
-            ?.setPositiveButton("Выйти") { _, _ ->
+            ?.setPositiveButton(R.string.logout) { _, _ ->
                 AppAuth.getInstance().clearAuth()
                 findNavController().navigateUp()
-            }
-            ?.setNegativeButton(
-                "Остаться"
+            }?.setNegativeButton(
+                R.string.stay_here
             ) { cancelDialog, _ ->
                 cancelDialog.cancel()
             }
@@ -69,9 +64,7 @@ class NewPostFragment : Fragment() {
                 when (it.resultCode) {
                     ImagePicker.RESULT_ERROR -> {
                         Snackbar.make(
-                            binding.root,
-                            ImagePicker.getError(it.data),
-                            Snackbar.LENGTH_LONG
+                            binding.root, ImagePicker.getError(it.data), Snackbar.LENGTH_LONG
                         ).show()
                     }
 
@@ -81,50 +74,6 @@ class NewPostFragment : Fragment() {
                     }
                 }
             }
-        var currentMenuProvider: MenuProvider? = null
-
-        authViewModel.auth.observe(viewLifecycleOwner) {
-            val authorized = authViewModel.authorized
-
-            currentMenuProvider?.let(requireActivity()::removeMenuProvider)
-
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.auth_menu, menu)
-
-                    menu.setGroupVisible(R.id.auth, authorized)
-                    menu.setGroupVisible(R.id.unauth, !authorized)
-
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-                    when (menuItem.itemId) {
-                        R.id.sign_in -> {
-                            findNavController().navigate(R.id.action_feedFragment_to_regFragment,
-                                Bundle().apply {
-                                    textArg = getString(R.string.sign_in)
-                                })
-                            true
-                        }
-
-                        R.id.sign_up -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
-                            true
-                        }
-
-                        R.id.logout -> {
-                            cancelDialog?.show()
-                            true
-                        }
-
-                        else -> {
-                            false
-                        }
-                    }
-            }.apply {
-                currentMenuProvider = this
-            }, viewLifecycleOwner)
-        }
 
         binding.edit.requestFocus()
 
@@ -149,24 +98,17 @@ class NewPostFragment : Fragment() {
         }, viewLifecycleOwner)
 
         binding.pickPhoto.setOnClickListener {
-            ImagePicker.with(this)
-                .crop()
-                .compress(2048)
-                .provider(ImageProvider.GALLERY)
+            ImagePicker.with(this).crop().compress(2048).provider(ImageProvider.GALLERY)
                 .galleryMimeTypes(
                     arrayOf(
                         "image/png",
                         "image/jpeg",
                     )
-                )
-                .createIntent(pickPhotoLauncher::launch)
+                ).createIntent(pickPhotoLauncher::launch)
         }
 
         binding.takePhoto.setOnClickListener {
-            ImagePicker.with(this)
-                .crop()
-                .compress(2048)
-                .provider(ImageProvider.CAMERA)
+            ImagePicker.with(this).crop().compress(2048).provider(ImageProvider.CAMERA)
                 .createIntent(pickPhotoLauncher::launch)
         }
 
@@ -175,8 +117,7 @@ class NewPostFragment : Fragment() {
             binding.errorGroup.isVisible = state.error
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.retry) { viewModel.load() }
-                    .show()
+                    .setAction(R.string.retry) { viewModel.load() }.show()
             }
         }
 
@@ -197,6 +138,7 @@ class NewPostFragment : Fragment() {
             viewModel.changeContent(binding.edit.text.toString())
             viewModel.save()
             AndroidUtils.hideKeyboard(requireView())
+//            findNavController().navigateUp()
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {

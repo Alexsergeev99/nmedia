@@ -36,5 +36,9 @@
     <string name="authorization">Authorization</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
+    <string name="enterToContinue">Enter to continue</string>
+    <string name="cancel">Cancel</string>
+    <string name="areYouSure">Are you sure?</string>
+    <string name="stay_here">Stay here</string>
 
 </resources>

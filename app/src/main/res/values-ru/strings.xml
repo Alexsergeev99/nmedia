@@ -26,4 +26,9 @@
     <string name="authorization">Авторизация</string>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
+    <string name="enterToContinue">Войдите, чтобы продолжить</string>
+    <string name="cancel">Отменить</string>
+    <string name="areYouSure">Вы действительно хотите выйти?</string>
+    <string name="stay_here">Остаться</string>
+
 </resources>
