@@ -1,6 +1,7 @@
 package ru.netology.nmedia.auth
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.bumptech.glide.Glide.init
 import com.google.firebase.ktx.Firebase
@@ -30,6 +31,7 @@ class AppAuth private constructor(context: Context) {
             prefs.edit { clear() }
         }
         sendPushToken()
+        Log.d("eee", token.toString())
     }
 
     fun sendPushToken(token: String? = null) {

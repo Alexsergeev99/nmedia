@@ -22,7 +22,6 @@ class FCMService : FirebaseMessagingService() {
     private val content = "content"
     private val channelId = "remote"
     private val gson = Gson()
-    lateinit var auth: AppAuth
 
     override fun onCreate() {
         super.onCreate()
@@ -62,7 +61,7 @@ class FCMService : FirebaseMessagingService() {
         val pushMessage = message.data.values.map {
             gson.fromJson(it, Message::class.java)
         }[0]
-        val authId = auth.state.value?.id
+        val authId = AppAuth.getInstance().state.value?.id
         when {
             pushMessage.recipientId == authId -> {
                 handleMessage(pushMessage)
@@ -73,11 +72,12 @@ class FCMService : FirebaseMessagingService() {
             }
 
             pushMessage.recipientId == 0L -> {
-                auth.sendPushToken()
+//                AppAuth.getInstance().sendPushToken()
+                handleAnonimMessage(pushMessage)
             }
 
             pushMessage.recipientId != 0L -> {
-                auth.sendPushToken()
+                AppAuth.getInstance().sendPushToken()
             }
         }
     }
@@ -119,6 +119,17 @@ class FCMService : FirebaseMessagingService() {
             NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(
                     content.content
+                ).setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
+
+        notify(notification)
+    }
+
+    private fun handleAnonimMessage(content: Message) {
+        val notification =
+            NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(
+                    content.content +
+                    "Anonim"
                 ).setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
 
         notify(notification)
