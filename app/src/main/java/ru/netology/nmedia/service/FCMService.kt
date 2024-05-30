@@ -22,6 +22,7 @@ class FCMService : FirebaseMessagingService() {
     private val content = "content"
     private val channelId = "remote"
     private val gson = Gson()
+    val auth: AppAuth = AppAuth.getInstance()
 
     override fun onCreate() {
         super.onCreate()
@@ -61,7 +62,7 @@ class FCMService : FirebaseMessagingService() {
         val pushMessage = message.data.values.map {
             gson.fromJson(it, Message::class.java)
         }[0]
-        val authId = AppAuth.getInstance().state.value?.id
+        val authId = auth.state.value?.id ?: 0L
         when {
             pushMessage.recipientId == authId -> {
                 handleMessage(pushMessage)
@@ -71,19 +72,19 @@ class FCMService : FirebaseMessagingService() {
                 handleMessage(pushMessage)
             }
 
-            pushMessage.recipientId == 0L -> {
-//                AppAuth.getInstance().sendPushToken()
-                handleAnonimMessage(pushMessage)
-            }
+//            pushMessage.recipientId == 0L -> {
+////                AppAuth.getInstance().sendPushToken()
+//                handleAnonimMessage(pushMessage)
+//            }
 
-            pushMessage.recipientId != 0L -> {
-                AppAuth.getInstance().sendPushToken()
+           else -> {
+                auth.sendPushToken()
             }
         }
     }
 
     override fun onNewToken(token: String) {
-        AppAuth.getInstance().sendPushToken(token)
+        auth.sendPushToken(token)
     }
 
     private fun handleLike(content: Like) {
