@@ -7,11 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.entity.PostEntity
-@Database(entities = [PostEntity::class], version = 2
-//    , autoMigrations = [
-//    AutoMigration (from = 1, to = 2)
-//], exportSchema = true
-)
+@Database(entities = [PostEntity::class], version = 2)
 abstract  class AppDb : RoomDatabase() {
     abstract  val postDao: PostDao
 
@@ -19,11 +15,11 @@ abstract  class AppDb : RoomDatabase() {
         @Volatile
         private var instance: AppDb? = null
 
-        fun getInstance(context: Context): AppDb {
-            return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
-            }
-        }
+//        fun getInstance(context: Context): AppDb {
+//            return instance ?: synchronized(this) {
+//                instance ?: buildDatabase(context).also { instance = it }
+//            }
+//        }
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context, AppDb::class.java, "app.db")

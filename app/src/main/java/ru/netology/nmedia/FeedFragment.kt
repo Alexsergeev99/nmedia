@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
@@ -20,6 +21,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()

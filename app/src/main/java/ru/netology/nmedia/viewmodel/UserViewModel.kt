@@ -7,8 +7,8 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository =
-        PostRepositoryRoomImpl(AppDb.getInstance(context = application).postDao)
+//    private val repository: PostRepository =
+//        PostRepositoryRoomImpl(AppDb.getInstance(context = application).postDao)
 
 //    private val _data = MutableLiveData(-1)
 //    val data: LiveData<Int>

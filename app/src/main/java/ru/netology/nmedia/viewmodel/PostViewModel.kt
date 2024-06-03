@@ -5,9 +5,11 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
@@ -23,6 +25,7 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.File
+import javax.inject.Inject
 
 private val empty = Post(
     id = 0,
@@ -37,13 +40,19 @@ private val empty = Post(
     video = null
 )
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class PostViewModel @Inject constructor(private val repository: PostRepository,
+    private val appAuth: AppAuth) : ViewModel() {
+
+    @Inject
+    lateinit var appDb: AppDb
+
     private val noPhoto = PhotoModel()
-    private val repository: PostRepository =
-        PostRepositoryRoomImpl(AppDb.getInstance(context = application).postDao)
+//    private val repository: PostRepository =
+//        PostRepositoryRoomImpl(appDb(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
     @OptIn(ExperimentalCoroutinesApi::class)
-    val data: LiveData<FeedModel> = AppAuth.getInstance()
+    val data: LiveData<FeedModel> = appAuth
         .state
         .flatMapLatest { auth ->
             repository.data

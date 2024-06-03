@@ -11,26 +11,24 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.navigation.findNavController
-import ru.netology.nmedia.R
-import ru.netology.nmedia.NewPostFragment.Companion.textArg
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.view.MenuProvider
-import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
-import ru.netology.nmedia.EditPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.databinding.ActivityIntentHandlerBinding
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler) {
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
 
     val authViewModel: AuthViewModel by viewModels()
     @SuppressLint("SuspiciousIndentation")
@@ -58,7 +56,7 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
         }
         var currentMenuProvider: MenuProvider? = null
 
-        authViewModel.auth.observe(this) {
+        authViewModel.authData.observe(this) {
             val authorized = authViewModel.authorized
 
             currentMenuProvider?.let {
@@ -85,12 +83,12 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
                         }
 
                         R.id.sign_up -> {
-                            AppAuth.getInstance().setAuth(5, "x-token")
+                            appAuth.setAuth(5, "x-token")
                             true
                         }
 
                         R.id.logout -> {
-                            AppAuth.getInstance().clearAuth()
+                            appAuth.clearAuth()
                             true
                         }
 
@@ -114,6 +112,6 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
             return
         }
         requestPermissions(arrayOf(permission), 1)
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(::println)
+        firebaseMessaging.token.addOnCompleteListener(::println)
     }
 }

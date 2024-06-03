@@ -90,8 +90,8 @@ interface ApiService {
     suspend fun pushToken(@Body token: PushToken): Response<Unit>
 }
 
-object Api {
-    val retrofitService: ApiService by lazy {
-        retrofit.create()
-    }
-}
+//object Api {
+//    val retrofitService: ApiService by lazy {
+//        retrofit.create()
+//    }
+//}
