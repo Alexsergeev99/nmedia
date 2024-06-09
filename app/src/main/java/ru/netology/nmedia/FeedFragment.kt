@@ -10,9 +10,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
@@ -109,7 +111,7 @@ class FeedFragment : Fragment() {
         )
         //}
 
-        viewModel.newerCount.observe(viewLifecycleOwner) {
+        lifecycleScope.launchWhenCreated {
             binding.newPosts.isVisible = true
             binding.newPosts.setOnClickListener {
                 binding.newPosts.isVisible = false
@@ -118,16 +120,32 @@ class FeedFragment : Fragment() {
             }
         }
 
+//        viewModel.newerCount.observe(viewLifecycleOwner) {
+//            binding.newPosts.isVisible = true
+//            binding.newPosts.setOnClickListener {
+//                binding.newPosts.isVisible = false
+//                binding.list.smoothScrollToPosition(0)
+//                viewModel.showNewPosts()
+//            }
+//        }
+
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            val isNewPost = state.posts.size > adapter.currentList.size
-            adapter.submitList(state.posts) {
-                if (isNewPost) {
-                    binding.list.smoothScrollToPosition(0)
-                }
-                binding.emptyText.isVisible = state.empty
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
             }
         }
+
+//        viewModel.data.observe(viewLifecycleOwner) { state ->
+//            val isNewPost = state.posts.size > adapter.currentList.size
+//            adapter.submitData(state.posts) {
+//                if (isNewPost) {
+//                    binding.list.smoothScrollToPosition(0)
+//                }
+//                binding.emptyText.isVisible = state.empty
+//            }
+//        }
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
 //            binding.errorGroup.isVisible = state.error
             binding.progress.isVisible = state.loading

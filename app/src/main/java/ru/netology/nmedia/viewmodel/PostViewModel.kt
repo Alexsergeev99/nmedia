@@ -6,14 +6,21 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
@@ -52,17 +59,18 @@ class PostViewModel @Inject constructor(private val repository: PostRepository,
 //        PostRepositoryRoomImpl(appDb(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
     @OptIn(ExperimentalCoroutinesApi::class)
-    val data: LiveData<FeedModel> = appAuth
+    val data: Flow<PagingData<Post>> = appAuth
         .state
         .flatMapLatest { auth ->
             repository.data
                 .map { posts ->
-                    FeedModel(
-                        posts.map { it.copy(ownedByMe = it.authorId == auth?.id) },
+//                    FeedModel(
+                        posts.map { it.copy(ownedByMe = it.authorId == auth?.id) }
 //                        posts.isEmpty()
-                    )
+//                    )
                 }
-        }.asLiveData(Dispatchers.Default)
+        }.flowOn(Dispatchers.Default)
+
     val edited = MutableLiveData(empty)
     private val _dataState = MutableLiveData(FeedModelState())
     val dataState: LiveData<FeedModelState>
@@ -77,10 +85,11 @@ class PostViewModel @Inject constructor(private val repository: PostRepository,
     val photo: LiveData<PhotoModel>
         get() = _photo
 
-    val newerCount: LiveData<Int> = data.switchMap {
-        val newerId = it.posts.firstOrNull()?.id ?: 0L
-        repository.getNewerCount(newerId).asLiveData(Dispatchers.Default)
-    }
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    val newerCount: Flow<Flow<Int>> = data.mapLatest {
+//        val newerId = it.posts.firstOrNull()?.id ?: 0L
+//        repository.getNewerCount(newerId).flowOn(Dispatchers.Default)
+//    }
 
     fun Int.toShortString(): String = when (this) {
         in 0..<1_000 -> this.toString()
