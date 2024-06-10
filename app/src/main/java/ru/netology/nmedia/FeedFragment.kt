@@ -163,8 +163,8 @@ class FeedFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenCreated {
-             adapter.loadStateFlow.collectLatest {
-                 binding.swipe.isRefreshing = it.refresh is LoadState.Loading ||
+            adapter.loadStateFlow.collectLatest {
+                binding.swipe.isRefreshing = it.refresh is LoadState.Loading ||
                         it.append is LoadState.Loading ||
                         it.prepend is LoadState.Loading
             }
@@ -173,6 +173,10 @@ class FeedFragment : Fragment() {
             viewModel.load()
             binding.swipe.isRefreshing = false
             binding.newPosts.isVisible = false
+            adapter.refresh()
+        }
+
+        authViewModel.data.observe(viewLifecycleOwner) {
             adapter.refresh()
         }
 

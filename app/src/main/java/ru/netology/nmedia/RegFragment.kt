@@ -7,18 +7,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentRegBinding
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.viewmodel.UserViewModel
 import kotlin.coroutines.EmptyCoroutineContext
 
+@AndroidEntryPoint
 class RegFragment : Fragment() {
     private val viewModel: AuthViewModel by activityViewModels()
+    private val postViewModel: PostViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +43,7 @@ class RegFragment : Fragment() {
             scope.launch {
                 viewModel.uploadUser(login, password)
             }
+            postViewModel.load()
             findNavController().navigateUp()
 //                Toast.makeText(context, "Authorization failed", Toast.LENGTH_LONG).show()
 //                findNavController().navigateUp()

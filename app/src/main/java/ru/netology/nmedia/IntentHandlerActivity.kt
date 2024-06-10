@@ -5,20 +5,21 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.navigation.findNavController
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
+import androidx.navigation.findNavController
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.CardPostFragment.Companion.textArg1
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,7 +31,9 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
     @Inject
     lateinit var firebaseMessaging: FirebaseMessaging
 
+    val postViewModel: PostViewModel by viewModels()
     val authViewModel: AuthViewModel by viewModels()
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +45,7 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
             val text = it.getStringExtra(Intent.EXTRA_TEXT)
             if (text?.isNotBlank() != true) {
                 return@let
-            }
-
-            else {
+            } else {
                 intent.removeExtra(Intent.EXTRA_TEXT)
                 findNavController(androidx.navigation.fragment.R.id.nav_host_fragment_container)
                     .navigate(R.id.action_feedFragment_to_newPostFragment,
@@ -63,7 +64,7 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
                 removeMenuProvider(it)
             }
 
-           addMenuProvider(object : MenuProvider {
+            addMenuProvider(object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                     menuInflater.inflate(R.menu.auth_menu, menu)
 
@@ -79,6 +80,7 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
                                 Bundle().apply {
                                     textArg1 = getString(R.string.sign_in)
                                 })
+//                            postViewModel.load()
                             true
                         }
 
@@ -89,6 +91,7 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
 
                         R.id.logout -> {
                             appAuth.clearAuth()
+//                            postViewModel.load()
                             true
                         }
 
