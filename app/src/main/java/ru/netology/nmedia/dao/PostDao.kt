@@ -2,6 +2,7 @@ package ru.netology.nmedia.dao
 
 import android.icu.text.UnicodeSet.CASE
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -16,6 +17,8 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getPagingSource(): PagingSource<Int, PostEntity>
     @Query("SELECT * FROM PostEntity WHERE visibility = 1 ORDER BY id DESC")
     fun getAllNewer(): Flow<List<PostEntity>>
 
@@ -54,4 +57,7 @@ interface PostDao {
 
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun getPostById(id: Long): PostEntity
+
+    @Query("DELETE FROM POSTENTITY")
+    suspend fun clear()
 }
