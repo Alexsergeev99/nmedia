@@ -1,14 +1,10 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -19,8 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.switchMap
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
@@ -29,7 +23,6 @@ import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.repository.PostRepository
-import ru.netology.nmedia.repository.PostRepositoryRoomImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
@@ -48,16 +41,20 @@ private val empty = Post(
 )
 
 @HiltViewModel
-class PostViewModel @Inject constructor(private val repository: PostRepository,
-    private val appAuth: AppAuth) : ViewModel() {
+class PostViewModel @Inject constructor(
+    private val repository: PostRepository,
+    private val appAuth: AppAuth
+) : ViewModel() {
 
     @Inject
     lateinit var appDb: AppDb
 
     private val noPhoto = PhotoModel()
-//    private val repository: PostRepository =
+
+    //    private val repository: PostRepository =
 //        PostRepositoryRoomImpl(appDb(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val data: Flow<PagingData<Post>> = appAuth
         .state
@@ -65,7 +62,7 @@ class PostViewModel @Inject constructor(private val repository: PostRepository,
             repository.data
                 .map { posts ->
 //                    FeedModel(
-                        posts.map { it.copy(ownedByMe = it.authorId == auth?.id) }
+                    posts.map { it.copy(ownedByMe = it.authorId == auth?.id) }
 //                        posts.isEmpty()
 //                    )
                 }
@@ -107,7 +104,8 @@ class PostViewModel @Inject constructor(private val repository: PostRepository,
     fun load() = viewModelScope.launch {
         try {
             _dataState.value = FeedModelState(loading = true)
-            repository.getAll()
+//            repository.getAll()
+            repository.getLatest()
             repository.showAll()
             _dataState.value = FeedModelState()
         } catch (e: Exception) {

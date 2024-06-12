@@ -5,9 +5,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -19,6 +21,7 @@ import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
 import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.errors.ApiError
@@ -36,10 +39,6 @@ class PostRepositoryRoomImpl @Inject constructor(
     private val apiService: ApiService,
     private val appDb: AppDb
 ) : PostRepository {
-
-//    override val data = dao.getAllNewer()
-//        .map(List<PostEntity>::toDto)
-//        .flowOn(Dispatchers.Default)
 
     @OptIn(ExperimentalPagingApi::class)
     override val data = Pager(
@@ -192,7 +191,7 @@ class PostRepositoryRoomImpl @Inject constructor(
         while (true) {
             delay(10.seconds)
             try {
-                val response = apiService.getNewer(newerId)
+                val response = apiService.getNewerCount(newerId)
                 val body = response.body() ?: continue
                 dao.insertInBackground(body.toEntity(false))
                 emit(body.size)
