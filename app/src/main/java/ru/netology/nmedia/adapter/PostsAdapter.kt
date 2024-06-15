@@ -1,4 +1,4 @@
-package ru.netology.nmedia
+package ru.netology.nmedia.adapter
 
 import android.content.Intent
 import android.net.Uri
@@ -9,10 +9,10 @@ import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import okhttp3.MediaType.Companion.toMediaType
+import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import java.text.SimpleDateFormat
@@ -104,7 +104,7 @@ class PostViewHolder(
             }
 
             Glide.with(binding.avatar)
-                .load("${BASE_URL}/avatars/${post.authorAvatar}")
+                .load("$BASE_URL/avatars/${post.authorAvatar}")
                 .circleCrop()
                 .placeholder(R.drawable.image_loading)
                 .error(R.drawable.image_error)
@@ -114,7 +114,7 @@ class PostViewHolder(
             if (post.attachment != null) {
                 binding.attachment.isVisible = true
                 Glide.with(binding.attachment)
-                    .load("${BASE_URL}/media/${post.attachment?.url}")
+                    .load("$BASE_URL/media/${post.attachment?.url}")
                     .placeholder(R.drawable.image_loading)
                     .error(R.drawable.image_error)
                     .timeout(30000)

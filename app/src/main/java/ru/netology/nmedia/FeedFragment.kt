@@ -16,9 +16,10 @@ import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import ru.netology.nmedia.CardPostFragment.Companion.textArg1
-import ru.netology.nmedia.EditPostFragment.Companion.idArg
 import ru.netology.nmedia.EditPostFragment.Companion.textArg
+import ru.netology.nmedia.adapter.LoadingStateAdapter
+import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.adapter.onInteractionListener
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.AuthViewModel
@@ -130,7 +131,14 @@ class FeedFragment : Fragment() {
 //            }
 //        }
 
-        binding.list.adapter = adapter
+        binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = LoadingStateAdapter {
+                adapter.retry()
+            },
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
 
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
@@ -164,9 +172,8 @@ class FeedFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
-                binding.swipe.isRefreshing = it.refresh is LoadState.Loading ||
-                        it.append is LoadState.Loading ||
-                        it.prepend is LoadState.Loading
+                binding.swipe.isRefreshing = it.refresh is LoadState.Loading
+//                        || it.append is LoadState.Loading || it.prepend is LoadState.Loading
             }
         }
         binding.swipe.setOnRefreshListener {
