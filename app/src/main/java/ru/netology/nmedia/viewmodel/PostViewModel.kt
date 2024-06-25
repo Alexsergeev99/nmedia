@@ -1,12 +1,16 @@
 package ru.netology.nmedia.viewmodel
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.TerminalSeparatorType
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +22,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.db.AppDb
+import ru.netology.nmedia.dto.FeedItem
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.factory.TimeSeparatorsFactory
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.PhotoModel
@@ -43,6 +49,7 @@ private val empty = Post(
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
+    private val timeSeparatorsFactory: TimeSeparatorsFactory,
     private val appAuth: AppAuth
 ) : ViewModel() {
 
@@ -55,16 +62,20 @@ class PostViewModel @Inject constructor(
 //        PostRepositoryRoomImpl(appDb(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalCoroutinesApi::class)
-    val data: Flow<PagingData<Post>> = appAuth
+    val data: Flow<PagingData<FeedItem>> = appAuth
         .state
         .flatMapLatest { auth ->
             repository.data
                 .map { posts ->
-//                    FeedModel(
                     posts.map { it.copy(ownedByMe = it.authorId == auth?.id) }
-//                        posts.isEmpty()
-//                    )
+                }
+                .map { posts ->
+                    // SOURCE_COMPLETE, чтобы первый пост был null при скролле наверх и можно было вставить разделитель
+                    posts.insertSeparators(TerminalSeparatorType.SOURCE_COMPLETE) { previous, next ->
+                        timeSeparatorsFactory.create(previous, next)
+                    }
                 }
         }.flowOn(Dispatchers.Default)
 

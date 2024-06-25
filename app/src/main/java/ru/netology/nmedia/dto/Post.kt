@@ -8,7 +8,7 @@ sealed interface FeedItem{
 }
 
 data class Post(
-    val id: Long,
+    override val id: Long,
     val author: String,
     val authorId: Long,
     val authorAvatar: String = "",
@@ -21,7 +21,7 @@ data class Post(
     val visibility: Boolean = true,
     var attachment: Attachment? = null,
     val ownedByMe: Boolean = false
-)
+) : FeedItem
 
 data class Separator(
     override val id: Long,
