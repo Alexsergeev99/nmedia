@@ -3,13 +3,12 @@ package ru.netology.nmedia.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -21,7 +20,6 @@ import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
-import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
 import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.errors.ApiError
@@ -41,17 +39,20 @@ class PostRepositoryRoomImpl @Inject constructor(
 ) : PostRepository {
 
     @OptIn(ExperimentalPagingApi::class)
-    override val data = Pager(
+    override val data: Flow<PagingData<Post>> = Pager(
         config = PagingConfig(
             pageSize = 10,
-            enablePlaceholders = false
+            enablePlaceholders = true
         ),
         pagingSourceFactory = {
             dao.getPagingSource()
         },
         remoteMediator = PostRemoteMediator(apiService, dao, postRemoteKeyDao, appDb)
     ).flow
-        .map { it.map { it.toDto() } }
+        .map {
+            it.map { it.toDto() }
+        }
+
 
     override suspend fun getAll() {
         try {

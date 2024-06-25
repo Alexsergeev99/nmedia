@@ -3,6 +3,10 @@ package ru.netology.nmedia.dto
 import ru.netology.nmedia.entity.Attachment
 import ru.netology.nmedia.enumeration.AttachmentType
 
+sealed interface FeedItem{
+    val id: Long
+}
+
 data class Post(
     val id: Long,
     val author: String,
@@ -17,9 +21,14 @@ data class Post(
     val visibility: Boolean = true,
     var attachment: Attachment? = null,
     val ownedByMe: Boolean = false
-    )
+)
 
-data class Attachment (
+data class Separator(
+    override val id: Long,
+    val title: String
+) : FeedItem
+
+data class Attachment(
     val url: String,
     val description: String?,
     val type: AttachmentType,
