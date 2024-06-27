@@ -1,18 +1,14 @@
 package ru.netology.nmedia.factory
 
-import android.os.Build
 import android.text.format.DateUtils
-import androidx.annotation.RequiresApi
-import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.Separator
 import ru.netology.nmedia.repository.DateTimeRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.random.Random
 
 class TimeSeparatorsFactory @Inject constructor(dateTimeRepository: DateTimeRepository) {
-    @RequiresApi(Build.VERSION_CODES.O)
+    //    @RequiresApi(Build.VERSION_CODES.O)
     fun create(previous: Post?, next: Post?): Separator? {
         return when {
             previous == null && next?.published == next?.published?.let {

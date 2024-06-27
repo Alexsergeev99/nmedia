@@ -14,4 +14,8 @@ interface RepositoryModule {
     @Binds
     fun bindsPostRepository(impl: PostRepositoryRoomImpl): PostRepository
 
+    @Singleton
+    @Binds
+    fun bindsDateTimeRepository(impl: DateTimeRepositoryImpl): DateTimeRepository
+
 }

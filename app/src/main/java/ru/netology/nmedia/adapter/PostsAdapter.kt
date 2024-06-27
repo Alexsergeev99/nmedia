@@ -14,7 +14,10 @@ import com.bumptech.glide.Glide
 import okhttp3.MediaType.Companion.toMediaType
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.databinding.SeparatorBinding
+import ru.netology.nmedia.dto.FeedItem
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.Separator
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,15 +33,39 @@ interface onInteractionListener {
 
 
 class PostsAdapter(private val onInteractionListener: onInteractionListener) :
-    PagingDataAdapter<Post, PostViewHolder>(PostDifCallBack) {
+    PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostDifCallBack) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, onInteractionListener)
-    }
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
+            is Separator -> R.layout.separator
+            is Post -> R.layout.card_post
+            else -> error("error")
+        }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position) ?: return)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
+            R.layout.card_post -> {
+                val binding =
+                    CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                PostViewHolder(binding, onInteractionListener)
+            }
+
+            R.layout.separator -> {
+                val binding =
+                    SeparatorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                SeparatorViewHolder(binding)
+            }
+
+            else -> error("error")
+        }
+
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is Separator -> (holder as? SeparatorViewHolder)?.bind(item)
+            is Post -> (holder as? PostViewHolder)?.bind(item)
+            else -> error("error")
+        }
     }
 
 }
@@ -151,9 +178,18 @@ class PostViewHolder(
     }
 }
 
-object PostDifCallBack : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post) = oldItem.id == newItem.id
+class SeparatorViewHolder(
+    private val binding: SeparatorBinding,
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(separator: Separator) {
+        binding.separatorText.text = "Сегодня"
+    }
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post) = oldItem == newItem
+}
+
+object PostDifCallBack : DiffUtil.ItemCallback<FeedItem>() {
+    override fun areItemsTheSame(oldItem: FeedItem, newItem: FeedItem) = oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: FeedItem, newItem: FeedItem) = oldItem == newItem
 
 }

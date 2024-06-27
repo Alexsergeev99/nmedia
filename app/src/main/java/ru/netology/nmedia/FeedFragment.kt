@@ -143,11 +143,11 @@ class FeedFragment : Fragment() {
             }
         )
 
-//        lifecycleScope.launchWhenCreated {
-//            viewModel.data.collectLatest {
-//                adapter.submitData(it)
-//            }
-//        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
+            }
+        }
 
 //        viewModel.data.observe(viewLifecycleOwner) { state ->
 //            val isNewPost = state.posts.size > adapter.currentList.size
