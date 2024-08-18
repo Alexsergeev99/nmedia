@@ -8,8 +8,7 @@ import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.dto.Post
 
 interface PostRepository {
-    val data: Flow<PagingData<Post>>    //    val data: Flow<List<Post>>
-
+    val data: Flow<PagingData<Post>>
     suspend fun getAll()
     suspend fun getLatest()
 

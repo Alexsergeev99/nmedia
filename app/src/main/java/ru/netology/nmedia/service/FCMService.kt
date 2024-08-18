@@ -44,25 +44,6 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-//        message.data[action]?.let {
-//            try {
-//                when (Action.valueOf(it)) {
-//                    Action.LIKE -> handleLike(
-//                        gson.fromJson(
-//                            message.data[content], Like::class.java
-//                        )
-//                    )
-//
-//                    Action.NEW_POST -> handleNewPost(
-//                        gson.fromJson(
-//                            message.data[content], NewPost::class.java
-//                        )
-//                    )
-//                }
-//            } catch (e: Exception) {
-//                null
-//            }
-//        }
 
         val pushMessage = message.data.values.map {
             gson.fromJson(it, Message::class.java)
@@ -76,11 +57,6 @@ class FCMService : FirebaseMessagingService() {
             pushMessage.recipientId == null -> {
                 handleMessage(pushMessage)
             }
-
-//            pushMessage.recipientId == 0L -> {
-////                AppAuth.getInstance().sendPushToken()
-//                handleAnonimMessage(pushMessage)
-//            }
 
            else -> {
                 auth.sendPushToken()

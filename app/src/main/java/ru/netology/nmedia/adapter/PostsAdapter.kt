@@ -95,7 +95,6 @@ class PostViewHolder(
                 .format(Date((post.published).toLong() * 1000))
             mainText.text = post.content
             likes.isChecked = post.likedByMe
-//            binding.reposts.text = post.shares.toShortString()
             likes.text = post.likes.toShortString()
 
             likes.setOnClickListener {

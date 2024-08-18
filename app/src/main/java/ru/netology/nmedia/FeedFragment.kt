@@ -82,14 +82,6 @@ class FeedFragment : Fragment() {
                 viewModel.removeById(post.id)
             }
 
-            override fun onClick(post: Post) {
-//                findNavController().navigate(R.id.action_feedFragment_to_cardPostFragment,
-//                    Bundle().apply {
-//                        textArg1 = post.content
-//                        idArg = post.id.toInt()
-//                    })
-            }
-
             override fun onClickPhoto(post: Post) {
                 findNavController().navigate(R.id.action_feedFragment_to_photoFragment,
                     Bundle().apply {
@@ -105,16 +97,13 @@ class FeedFragment : Fragment() {
                     Bundle().apply {
                         textArg = post.content
                     })
-//                val intent = Intent().apply {
-//                    action = Intent.ACTION_SEND
-//                    type = "text/plain"
-//                    putExtra(Intent.EXTRA_TEXT, post.content)
-//                }
-//                editPostLauncher.launch(intent.getStringExtra(Intent.EXTRA_TEXT))
+            }
+
+            override fun onClick(post: Post) {
+                TODO("Not yet implemented")
             }
         }
         )
-        //}
 
         lifecycleScope.launchWhenCreated {
             binding.newPosts.isVisible = true
@@ -124,15 +113,6 @@ class FeedFragment : Fragment() {
                 viewModel.showNewPosts()
             }
         }
-
-//        viewModel.newerCount.observe(viewLifecycleOwner) {
-//            binding.newPosts.isVisible = true
-//            binding.newPosts.setOnClickListener {
-//                binding.newPosts.isVisible = false
-//                binding.list.smoothScrollToPosition(0)
-//                viewModel.showNewPosts()
-//            }
-//        }
 
         binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
             header = LoadingStateAdapter {
@@ -149,17 +129,7 @@ class FeedFragment : Fragment() {
             }
         }
 
-//        viewModel.data.observe(viewLifecycleOwner) { state ->
-//            val isNewPost = state.posts.size > adapter.currentList.size
-//            adapter.submitData(state.posts) {
-//                if (isNewPost) {
-//                    binding.list.smoothScrollToPosition(0)
-//                }
-//                binding.emptyText.isVisible = state.empty
-//            }
-//        }
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
-//            binding.errorGroup.isVisible = state.error
             binding.progress.isVisible = state.loading
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_text, Snackbar.LENGTH_LONG)
@@ -176,7 +146,6 @@ class FeedFragment : Fragment() {
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
                 binding.swipe.isRefreshing = it.refresh is LoadState.Loading
-//                        || it.append is LoadState.Loading || it.prepend is LoadState.Loading
             }
         }
         binding.swipe.setOnRefreshListener {

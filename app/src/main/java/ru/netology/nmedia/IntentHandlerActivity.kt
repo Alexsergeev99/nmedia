@@ -80,7 +80,6 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
                                 Bundle().apply {
                                     textArg1 = getString(R.string.sign_in)
                                 })
-//                            postViewModel.load()
                             true
                         }
 
@@ -91,7 +90,6 @@ class IntentHandlerActivity : AppCompatActivity(R.layout.activity_intent_handler
 
                         R.id.logout -> {
                             appAuth.clearAuth()
-//                            postViewModel.load()
                             true
                         }
 

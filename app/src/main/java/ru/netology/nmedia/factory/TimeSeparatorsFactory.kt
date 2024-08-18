@@ -8,7 +8,6 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 class TimeSeparatorsFactory @Inject constructor(dateTimeRepository: DateTimeRepository) {
-    //    @RequiresApi(Build.VERSION_CODES.O)
     fun create(previous: Post?, next: Post?): Separator? {
         return when {
             previous == null && next?.published == next?.published?.let {

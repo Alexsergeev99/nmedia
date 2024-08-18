@@ -57,8 +57,6 @@ class PostViewModel @Inject constructor(
 
     private val noPhoto = PhotoModel()
 
-    //    private val repository: PostRepository =
-//        PostRepositoryRoomImpl(appDb(context = application).postDao)
     private val _data = MutableLiveData(FeedModel())
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -92,12 +90,6 @@ class PostViewModel @Inject constructor(
     val photo: LiveData<PhotoModel>
         get() = _photo
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    val newerCount: Flow<Flow<Int>> = data.mapLatest {
-//        val newerId = it.posts.firstOrNull()?.id ?: 0L
-//        repository.getNewerCount(newerId).flowOn(Dispatchers.Default)
-//    }
-
     fun Int.toShortString(): String = when (this) {
         in 0..<1_000 -> this.toString()
         in 1_000..<10_000 -> "${(this / 100) / 10.0}K"
@@ -114,7 +106,6 @@ class PostViewModel @Inject constructor(
     fun load() = viewModelScope.launch {
         try {
             _dataState.value = FeedModelState(loading = true)
-//            repository.getAll()
             repository.getLatest()
             repository.showAll()
             _dataState.value = FeedModelState()
